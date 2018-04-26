@@ -1,0 +1,8 @@
+#main {
+  @include flex-cm;
+  .upload-box{
+    width: 768px;
+    height: 328px;
+    margin: 80px 0;
+  }
+}

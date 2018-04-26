@@ -1,3 +1,31 @@
-* {
-  font-size: 32px;
+.App {
+  width: 100vw;
+  height: 100vh;
+  min-width: 800px;
+  min-height: 600px;
+  position: relative;
 }
+
+a {
+  color: inherit;
+}
+
+@mixin flex-cm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-middle {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+}
+
+@import "components/header_dom.scss";
+@import "components/main_dom.scss";
+@import "components/footer_dom.scss";

@@ -1,29 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// redux
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import ClipboardJS from 'clipboard';
 
 // antd
-import { LocaleProvider } from 'antd';
-import 'antd/dist/antd.css';
+import { LocaleProvider, message } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
+import 'antd/dist/antd.css';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
-import rootReducer from './reducers';
+// redux
+import { Provider } from 'react-redux';
+import configureStore from './store';
+
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
+
+// clipboard
+const clipboard = new ClipboardJS('#copyCodeBtn');
+clipboard.on('success', () => message.success('成功复制到剪切板'));
+clipboard.on('error', () => message.error('复制到剪切板失败，似乎除了点问题呢~'));
 
 moment.locale('zh-cn');
 
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(thunk, logger)),
-);
+const store = configureStore();
 
 ReactDOM.render(
   <LocaleProvider locale={zhCN}>
@@ -32,4 +32,15 @@ ReactDOM.render(
     </Provider>
   </LocaleProvider>
   , document.getElementById('root'));
-registerServiceWorker();
+
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    ReactDOM.render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      document.getElementById('root'),
+    );
+  });
+}
+// registerServiceWorker();

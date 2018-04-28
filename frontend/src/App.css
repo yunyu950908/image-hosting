@@ -1,45 +1,19 @@
+#root {
+  width: 100%;
+  height: 100%; }
+
 .App {
-  width: 100vw;
-  height: 100vh;
+  position: relative;
+  width: 100%;
   min-width: 800px;
-  min-height: 600px;
-  position: relative; }
+  min-height: 100%; }
+
+* {
+  margin: 0;
+  padding: 0; }
 
 a {
   color: inherit; }
 
-#header {
-  color: #fff; }
-  #header .header-row div {
-    text-align: center; }
-
-#main {
-  display: flex;
-  justify-content: center;
-  align-items: center; }
-  #main .upload-box {
-    width: 768px;
-    height: 328px;
-    margin: 80px 0; }
-
-#footer {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 48px;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid #e8e8e8; }
-  #footer .footer-info {
-    display: flex;
-    align-items: center; }
-    #footer .footer-info time {
-      margin: 0 8px; }
-  #footer .footer-others {
-    display: flex;
-    align-items: center; }
-    #footer .footer-others a {
-      padding: 0 8px;
-      text-align: center; }
+li {
+  list-style: none; }

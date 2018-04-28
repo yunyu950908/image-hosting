@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import auth from './auth';
+import { uploadState } from './upload_reducer';
 
 export default combineReducers({
-  auth,
+  uploadState,
 });

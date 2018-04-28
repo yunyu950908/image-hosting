@@ -1,0 +1,22 @@
+#footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  min-width: 800px;
+  height: 48px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #e8e8e8; }
+  #footer .footer-info {
+    display: flex;
+    align-items: center; }
+    #footer .footer-info time {
+      margin: 0 8px; }
+  #footer .footer-others {
+    display: flex;
+    align-items: center; }
+    #footer .footer-others a {
+      padding: 0 8px;
+      text-align: center; }

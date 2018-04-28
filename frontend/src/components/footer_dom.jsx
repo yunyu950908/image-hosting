@@ -1,7 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-
 import { Icon } from 'antd';
+
+import './footer_dom.css';
 
 const FooterDOM = () => (
   <section id="footer">

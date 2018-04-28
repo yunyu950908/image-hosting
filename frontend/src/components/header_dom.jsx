@@ -1,6 +1,8 @@
 import React from 'react';
 import { Menu, Icon } from 'antd';
 
+import './header_dom.css';
+
 const { SubMenu } = Menu;
 
 const HeaderDOM = () => (

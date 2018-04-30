@@ -12,12 +12,14 @@ const loggerGenerator = (dirname) => {
         filename: `${loggerSetting.logsPath}/${dirname}/%DATE%.info.log`,
         datePattern: 'YYYY-MM-DD',
         level: 'info',
+        timestamp: true,
       }),
       new winston.transports.DailyRotateFile({
         name: 'error_logger',
         filename: `${loggerSetting.logsPath}/${dirname}/%DATE%.error.log`,
         datePattern: 'YYYY-MM-DD',
         level: 'error',
+        timestamp: true,
       }),
     ],
   });

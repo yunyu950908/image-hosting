@@ -7,6 +7,8 @@
 const app = require('../app');
 const debug = require('debug')('what-i-love:server');
 const http = require('http');
+const { appLogger } = require('../utils/loggers/loggerGenerator');
+const { loggerSetting } = require('../config/setting');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -30,6 +32,7 @@ function normalizePort(val) {
 
 const port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
+appLogger.info(`app start on port ${port}, logs directory path ${loggerSetting.logsPath}`);
 
 /**
  * Create HTTP server.

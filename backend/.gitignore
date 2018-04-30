@@ -113,3 +113,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+config/cipher
+config/setting
+

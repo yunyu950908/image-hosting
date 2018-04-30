@@ -1,4 +1,7 @@
 module.exports = {
   extends: 'airbnb-base',
-  rules: {},
+  rules: {
+    'object-curly-newline': 'off',
+    'no-underscore-dangle': 'off',
+  },
 };

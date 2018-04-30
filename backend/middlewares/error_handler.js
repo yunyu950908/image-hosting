@@ -1,3 +1,5 @@
+const { appLogger } = require('../utils/loggers/loggerGenerator');
+
 function handler(options) {
   return function (err, req, res, next) {
     const errMeta = {
@@ -7,7 +9,7 @@ function handler(options) {
       body: req.body,
       stack: err.stack,
     };
-    console.log('uncaught error in the middleware process', errMeta);
+    appLogger.error('uncaught error in the middleware process\n', errMeta);
   };
 }
 

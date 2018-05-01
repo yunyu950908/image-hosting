@@ -1,7 +1,5 @@
 const JWTService = require('../services/jwt_service');
 const NoAuthError = require('../errors/no_auth_error');
-const apiRes = require('../utils/api_response');
-const JWT = require('jsonwebtoken');
 
 const auth = options => (req, res, next) => {
   (async () => {

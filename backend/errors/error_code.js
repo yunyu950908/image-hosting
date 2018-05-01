@@ -8,7 +8,7 @@ const ERROR_CODE = {
   ParamTypeError: 4002, // 参数类型错误
   InvalidEmail: 4005, // 邮箱格式错误
   InvalidPassword: 40006, // 密码格式错误
-  _41: 41, // no auth
+  NoAuthError: 41, // no auth
   ResourceNotFoundError: 44, // resource not found
   InternalServerError: 50, // internal server error
   SystemError: 5001, // 系统错误

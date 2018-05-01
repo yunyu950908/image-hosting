@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ClipboardJS from 'clipboard';
 
+// react router
+import { ConnectedRouter } from 'react-router-redux';
+
 // antd
 import { LocaleProvider, message } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
@@ -13,8 +16,12 @@ import 'moment/locale/zh-cn';
 import { Provider } from 'react-redux';
 import configureStore from './store';
 
-import App from './App';
+// App
+import App from './App/App';
 // import registerServiceWorker from './registerServiceWorker';
+
+// history
+import history from './history';
 
 // clipboard
 const clipboard = new ClipboardJS('#copyCodeBtn');
@@ -28,16 +35,20 @@ const store = configureStore();
 ReactDOM.render(
   <LocaleProvider locale={zhCN}>
     <Provider store={store}>
-      <App />
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
     </Provider>
   </LocaleProvider>
   , document.getElementById('root'));
 
 if (module.hot) {
-  module.hot.accept('./App', () => {
+  module.hot.accept('./App/App', () => {
     ReactDOM.render(
       <Provider store={store}>
-        <App />
+        <ConnectedRouter history={history}>
+          <App />
+        </ConnectedRouter>
       </Provider>,
       document.getElementById('root'),
     );

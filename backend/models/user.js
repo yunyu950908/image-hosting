@@ -53,7 +53,7 @@ async function findUserByUsername(username) {
  * @param email String 注册邮箱
  * */
 async function findUserByEmail(email) {
-  const user = UserModel.findOne({ email }, { password: 0 });
+  const user = await UserModel.findOne({ email }, { password: 0 });
   return user;
 }
 
@@ -64,10 +64,6 @@ async function findUserByEmail(email) {
  * */
 async function createUserByEmailAndPwd(userInfo) {
   const { email, password } = userInfo;
-  // 检查该邮箱账号是否存在
-  // const buf = new Buffer(password, 'binary');
-  const isExist = await findUserByEmail(email);
-  if (isExist) throw new HttpReqParaError('该邮箱用户已存在', `duplicate key email: ${email} already exist`, 'email', ErrorCode.UserAlreadyExist);
   // pbkdf2 加密
   const pwdWithPbkdf2 = await encryptWithPbkdf2(password);
   // 用加密串创建 user

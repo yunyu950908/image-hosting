@@ -1,4 +1,4 @@
-@import "../variable.scss";
+@import "variable";
 
 #footer {
   position: absolute;
@@ -8,17 +8,13 @@
   min-width: $min-width;
   height: 48px;
   padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
   border-top: 1px solid #e8e8e8;
   .footer-info {
-    @include flex-middle;
     time {
       margin: 0 8px;
     }
   }
   .footer-others {
-    @include flex-middle;
     a {
       padding: 0 8px;
       text-align: center;

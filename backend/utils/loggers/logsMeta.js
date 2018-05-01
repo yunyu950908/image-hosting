@@ -1,3 +1,5 @@
+const ErrorCode = require('../../errors/error_code');
+
 const getReqMeta = req => ({
   protocol: req.protocol,
   hostname: req.hostname,
@@ -21,8 +23,8 @@ const getErrorMeta = (err, req, res) => {
     ...resMeta,
     statusCode: err.httpStatusCode || res.statusCode,
     errType: err.constructor.name,
-    stack: err.stack,
   };
+  if (res.code === ErrorCode.SystemError) errorMeta.stack = err.stack;
   return errorMeta;
 };
 

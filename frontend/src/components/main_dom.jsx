@@ -10,9 +10,14 @@ import UserCenterPage from './user_center_page';
 // CSS
 import './main_dom.css';
 
+const minHeight = window.innerHeight - 96;
 
 const MainDOM = () => (
-  <section id="main" className="d-flex flex-column justify-content-center align-items-center">
+  <section
+    id="main"
+    className="d-flex flex-column justify-content-center align-items-center"
+    style={{ minHeight: minHeight < 600 ? 600 : minHeight }}
+  >
     <Route exact path="/" component={ImageUploadPage} />
     <Route path="/upload" component={MyUploadedPage} />
     <Route path="/storage" component={StorageSettingPage} />

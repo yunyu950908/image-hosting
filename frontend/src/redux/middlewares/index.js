@@ -1,7 +1,7 @@
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'react-router-redux';
-import history from '../history';
+import history from '../../utils/history';
 
 const RouterMiddleware = routerMiddleware(history);
 

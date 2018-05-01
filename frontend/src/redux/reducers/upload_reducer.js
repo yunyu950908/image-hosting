@@ -1,4 +1,4 @@
-import { UPLOAD_FAILED, UPLOAD_SUCCESS } from '../constants';
+import { UPLOAD_FAILED, UPLOAD_SUCCESS } from '../constants/index';
 
 const initialState = {
   success: [],

@@ -6,10 +6,10 @@ import ImageUploadBox from './image_upload_box';
 import ImagePreviewBox from './image_preview_box';
 
 // action types
-import { uploadFile } from '../../actions';
+import { uploadFile } from '../../redux/actions';
 
 // constants
-import { LEANCLOUD } from '../../constants';
+import { LEANCLOUD } from '../../redux/constants';
 
 // todo 选择文件后直接展示预览，提示上传中，成功展示操作按钮，失败展示原因以及重新上传按钮
 

@@ -14,14 +14,14 @@ import 'moment/locale/zh-cn';
 
 // redux
 import { Provider } from 'react-redux';
-import configureStore from './store';
+import configureStore from './redux/store';
 
 // App
 import App from './App/App';
 // import registerServiceWorker from './registerServiceWorker';
 
 // history
-import history from './history';
+import history from './utils/history';
 
 // clipboard
 const clipboard = new ClipboardJS('#copyCodeBtn');

@@ -6,8 +6,8 @@ import {
   ALIYUN,
   SUCCESS,
   ERROR,
-} from '../constants';
-import { LOCAL, uploadToLeancloud } from '../leancloud';
+} from '../constants/index';
+import { LOCAL, uploadToLeancloud } from '../../utils/leancloud/index';
 
 /**
  * common response 返回一个 action

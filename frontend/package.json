@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^3.4.3",
+    "axios": "^0.18.0",
     "clipboard": "^2.0.0",
     "history": "^4.7.2",
     "leancloud-storage": "^3.6.8",

@@ -1,20 +1,3 @@
 // 变量
 $min-width: 800px;
 $min-height: 600px;
-
-// mixin
-@mixin flex-cm {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@mixin flex-middle {
-  display: flex;
-  align-items: center;
-}
-
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-}

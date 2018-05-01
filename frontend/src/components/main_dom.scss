@@ -1,46 +1,6 @@
-@import "../variable.scss";
+@import "variable.scss";
 
 #main {
-  @include flex-cm;
-  flex-direction: column;
+  min-height: $min-height;
   padding: 80px 0;
-  .upload-content {
-    width: 768px;
-    height: 328px;
-    border: 1px dashed #999999;
-    border-radius: 8px;
-    cursor: pointer;
-    //position: relative;
-    outline: none;
-    @include flex-cm;
-    flex-direction: column;
-    &:hover {
-      border-color: rgb(64, 169, 255);
-    }
-  }
-  .preview-content {
-    width: 768px;
-    ul.success-list {
-      li {
-        display: flex;
-        flex-direction: column;
-        margin: 24px 0;
-        article.image-preview {
-          width: 100%;
-          height: 280px;
-          overflow: hidden;
-          margin: 16px 0;
-          img {
-            width: 100%;
-          }
-        }
-        article.operate-bar {
-          display: flex;
-          button {
-            margin-left: 8px;
-          }
-        }
-      }
-    }
-  }
 }

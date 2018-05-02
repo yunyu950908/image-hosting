@@ -1,16 +1,24 @@
 import axios from 'axios';
 
-const request = axios.create();
+async function fetchSignUp(userInfo) {
+  const result = await axios({
+    method: 'post',
+    url: 'http://localhost:4000/user/signup',
+    data: userInfo,
+  });
+  return result;
+}
 
-const authToken = window.localStorage.getItem('zhazha_token') || '';
+async function fetchLogin(userInfo) {
+  const result = await axios({
+    method: 'post',
+    url: 'http://localhost:4000/user/login',
+    data: userInfo,
+  });
+  return result;
+}
 
-request.interceptors.request.use((config) => {
-  const authInfo = {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  };
-  return Object.assign(config, authInfo);
-}, err => Promise.reject(err));
-
-export default request;
+export {
+  fetchSignUp,
+  fetchLogin,
+};

@@ -1,4 +1,4 @@
-@import "../components/variable.css";
+@import "../components/variable.scss";
 
 // 公共样式
 #root {
@@ -16,10 +16,6 @@
 * {
   margin: 0;
   padding: 0;
-}
-
-a {
-  color: inherit;
 }
 
 li {

@@ -5,7 +5,10 @@ import { Icon } from 'antd';
 import './footer_dom.css';
 
 const FooterDOM = () => (
-  <section id="footer">
+  <section
+    id="footer"
+    className="d-flex justify-content-between align-items-center"
+  >
     <div className="footer-info">
       <Icon type="notification" />
       <time>{moment(Date.now()).format('YYYY-MM-DD')}</time>

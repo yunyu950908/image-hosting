@@ -20,7 +20,7 @@ const MainDOM = () => (
   >
     <Route exact path="/" component={ImageUploadPage} />
     <Route path="/upload" component={MyUploadedPage} />
-    <Route path="/storage" component={StorageSettingPage} />
+    <Route path="/setting" component={StorageSettingPage} />
     <Route path="/user" component={UserCenterPage} />
   </section>
 );

@@ -4,41 +4,8 @@ import {
   LEANCLOUD,
   QINIU,
   ALIYUN,
-  SUCCESS,
-  ERROR,
 } from '../constants/index';
 import { LOCAL, uploadToLeancloud } from '../../utils/leancloud/index';
-
-/**
- * common response 返回一个 action
- * @param status 响应状态 SUCCESS, ERROR
- * @param name 文件名
- * @param url 上传成功后得到的资源链接
- * */
-const COMMON_RESPONSE = (status, name, url) => {
-  let resultAction = {};
-  switch (status) {
-    case SUCCESS:
-      resultAction = {
-        type: UPLOAD_SUCCESS,
-        payload: {
-          name,
-          url,
-        },
-      };
-      break;
-    case ERROR:
-      resultAction = {
-        type: UPLOAD_FAILED,
-        payload: {
-          name,
-        },
-      };
-      break;
-    default:
-  }
-  return resultAction;
-};
 
 /**
  * lean cloud 请求处理， 返回一个 thunk 函数
@@ -49,10 +16,16 @@ const LEAN_CLOUD_REQUEST = fileData => async (dispatch) => {
     const result = await uploadToLeancloud(LOCAL, fileData);
     const { attributes } = result;
     const { name, url } = attributes;
-    dispatch(COMMON_RESPONSE(SUCCESS, name, url));
+    dispatch({
+      type: UPLOAD_SUCCESS,
+      payload: { name, url },
+    });
   } catch (e) {
-    console.log(e);
-    dispatch(COMMON_RESPONSE(ERROR, fileData.name));
+    console.error(e);
+    dispatch({
+      type: UPLOAD_FAILED,
+      payload: { name: fileData.name },
+    });
   }
 };
 

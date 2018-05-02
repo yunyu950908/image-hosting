@@ -17,6 +17,7 @@ const UserCenterPage = (props) => {
       <Route exact path={`${matchUrl}`} component={() => <div>user</div>} />
       <Route path={`${matchUrl}/sign`} component={SignupAndLogin} />
       <Route path={`${matchUrl}/login`} component={SignupAndLogin} />
+      <Route path={`${matchUrl}/logout`} component={SignupAndLogin} />
     </section>
   );
 };

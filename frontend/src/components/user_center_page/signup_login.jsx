@@ -118,6 +118,15 @@ class SignupAndLogin extends Component {
   }
 
   /**
+   * handleEnterPress 监听键盘事件
+   * */
+  handleEnterPress() {
+    const isSignup = this.props.location.pathname === '/user/sign';
+    if (isSignup) return this.fetchUserSignup();
+    return this.fetchUserLogin();
+  }
+
+  /**
    * changeUserInput 用户输入触发
    * @param value String 当前值
    * @param field String 字段名
@@ -247,6 +256,7 @@ class SignupAndLogin extends Component {
               type="password"
               placeholder="确认密码"
               onChange={e => this.changeUserInput(e.target.value, 'confirmPwd')}
+              onPressEnter={() => this.handleEnterPress()}
             />
           </Popover>
         </Item>
@@ -266,7 +276,7 @@ class SignupAndLogin extends Component {
             >
               戳我注册
             </Button>
-            <Button onClick={() => this.props.push('/user/login')}>返回登录</Button>
+            <Button onClick={() => this.props.replace('/user/login')}>返回登录</Button>
           </div>
         </Item>
       </div>
@@ -299,7 +309,7 @@ class SignupAndLogin extends Component {
             >
               戳我登录
             </Button>
-            <Button onClick={() => this.props.push('/user/sign')}>马上注册</Button>
+            <Button onClick={() => this.props.replace('/user/sign')}>马上注册</Button>
           </div>
         </Item>
       </div>
@@ -346,12 +356,11 @@ class SignupAndLogin extends Component {
                 type="password"
                 placeholder="8~16 位大小写字母与数字组合"
                 onChange={e => this.changeUserInput(e.target.value, 'password')}
+                onPressEnter={() => this.handleEnterPress()}
               />
             </Popover>
           </Item>
-          {/* 注册标记 */}
           {this.props.location.pathname === '/user/sign' ? this.signupDOM() : this.loginDOM()}
-          {/* 注册标记 */}
         </Form>
       </article>
     );

@@ -5,6 +5,13 @@ const ErrorCode = require('../errors/error_code');
 const UserModel = require('../models/user');
 const JWTService = require('./jwt_service');
 
+// pbkdf2
+const pbkdf2Async = require('bluebird').promisify(require('crypto').pbkdf2);
+const PasswordConfig = require('../config/cipher/password_config');
+
+const { SALT, ITERATIONS, KEYLEN, DIGEST } = PasswordConfig;
+const encryptWithPbkdf2 = password => pbkdf2Async(password, SALT, ITERATIONS, KEYLEN, DIGEST);
+
 /**
  * verifyPassword 密码校验，错误则抛错
  * @param password String 密码
@@ -66,16 +73,68 @@ async function userLogin(userInfo) {
   verifyPassword(password);
   const isExist = await UserModel.findUserByEmail(email);
   if (!isExist) throw new LoginError('账户不存在', `no such user ${email}`, ErrorCode.NoSuchUser);
-  const result = await UserModel.findUserByEmailAndPwd({ email, password }, { _id: 1, email: 1 });
+  const result = await UserModel.findUserByEmailAndPwd({ email, password }, { _id: 1, email: 1, hostSetting: 1 });
   if (!result) throw new LoginError('密码错误', `password error ${email}`, ErrorCode.PasswordError);
   const token = JWTService.setJWT(result._id);
   return {
     email,
+    hostSetting: result.hostSetting,
     token,
   };
 }
 
+/**
+ * todo findUserAndUpdate 更新用户信息，暂时先这样吧... 很多东西不太熟，之后再研究
+ * */
+async function findUserAndUpdate(userInfo, updateInfo, updateField) {
+  let updateData = {};
+  switch (updateField) {
+    case 'email': // 更新成功后要求重新登录
+      updateData = { email: updateInfo.email };
+      break;
+    case 'password': // 更新成功后要求重新登录
+      try {
+        const password = await encryptWithPbkdf2(updateInfo.password);
+        updateData = { password };
+      } catch (e) {
+        throw new Error('pbkdf2 加密错误');
+      }
+      break;
+    case 'hostSetting':
+      try {
+        updateData = {
+          hostSetting: {
+            leancloud: {
+              config: {
+                APP_ID: updateInfo.hostSetting.leancloud.config.APP_ID,
+                APP_KEY: updateInfo.hostSetting.leancloud.config.APP_KEY,
+              },
+            },
+          },
+        };
+      } catch (e) {
+        throw new HTTPReqParamError('更新字段内容错误', 'update field error', 'hostSetting', ErrorCode.ParamTypeError);
+      }
+      break;
+    case 'getHostSetting':
+      updateData = {};
+      break;
+    default:
+      throw new HTTPReqParamError('需指定更新字段名，或字段名错误', 'need update field', 'updateField', ErrorCode.RequiredParamEmptyError);
+  }
+  const result = await UserModel.findUserAndUpdate(userInfo, updateData);
+  if (!result) {
+    throw new LoginError(
+      '账户不存在或授权信息错误，请注册或重新登录',
+      `no such user，or invalid auth info ${userInfo.email}`,
+      ErrorCode.NoSuchUser,
+    );
+  }
+  return result;
+}
+
 module.exports = {
+  findUserAndUpdate,
   addNewUser,
   userLogin,
 };

@@ -17,11 +17,11 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   username: { type: String },
   nickname: { type: String },
-  hostProvider: {
+  hostSetting: {
     leancloud: {
       config: {
-        APP_ID: { type: String },
-        APP_KEY: { type: String },
+        APP_ID: { type: String, required: true, default: '尚未配置' },
+        APP_KEY: { type: String, required: true, default: '尚未配置' },
       },
       // fileData: [], // 直接在前端 leancloud API 增 删 查
     },
@@ -68,6 +68,7 @@ async function createUserByEmailAndPwd(userInfo) {
   const pwdWithPbkdf2 = await encryptWithPbkdf2(password);
   // 用加密串创建 user
   const result = await UserModel.create({ email, password: pwdWithPbkdf2 });
+  if (!result) return null;
   return {
     _id: result._id,
     email: result.email,
@@ -86,7 +87,24 @@ async function findUserByEmailAndPwd(userInfo) {
   return result;
 }
 
+/**
+ * findUserAndUpdata todo 临时处理用户数据更新
+ * @param userInfo _id String
+ * @param userInfo email String
+ * @param updateInfo Object
+ * */
+async function findUserAndUpdate(userInfo, updateInfo) {
+  const { _id, email } = userInfo;
+  const result = await UserModel.findOneAndUpdate({ _id, email }, { ...updateInfo }, { new: true });
+  if (!result) return null;
+  return {
+    email: result.email,
+    hostSetting: result.hostSetting,
+  };
+}
+
 module.exports = {
+  findUserAndUpdate,
   findUserByUsername,
   findUserByEmail,
   createUserByEmailAndPwd,

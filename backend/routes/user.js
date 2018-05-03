@@ -17,6 +17,7 @@ router.post('/signup', (req, res, next) => {
     return result;
   })()
     .then((r) => {
+      console.log(r);
       res.data = r;
       apiRes(req, res);
     })
@@ -49,13 +50,40 @@ router.post('/login', (req, res, next) => {
  * /user/update 更新用户信息
  * */
 router.post('/update', auth(), (req, res, next) => {
-  apiRes(req, res);
+  (async () => {
+    const { _id } = req.authInfo;
+    const { email, updateField } = req.body;
+    const result = await UserService.findUserAndUpdate({ _id, email }, req.body, updateField);
+    return result;
+  })()
+    .then((r) => {
+      res.data = r;
+      apiRes(req, res);
+    })
+    .catch((e) => {
+      next(e);
+    });
 });
 
 /**
- * 
- * @param 
- * @param 
+ * /user/host 获取图床服务器配置
  * */
+
+router.post('/host', auth(), (req, res, next) => {
+  (async () => {
+    console.log(req.authInfo);
+    const { _id } = req.authInfo;
+    const { email } = req.body;
+    const result = UserService.findUserAndUpdate({ _id, email }, {}, 'getHostSetting');
+    return result;
+  })()
+    .then((r) => {
+      res.data = r;
+      apiRes(req, res);
+    })
+    .catch((e) => {
+      next(e);
+    });
+});
 
 module.exports = router;

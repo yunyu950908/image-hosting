@@ -35,10 +35,12 @@ app.use(errorHandler());
 
 process.on('uncaughtException', (err) => {
   appLogger.error('uncaught exception error\n', err);
+  process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, p) => {
   appLogger.error('unhandled rejection error\n', { reason, p });
+  process.exit(1);
 });
 
 

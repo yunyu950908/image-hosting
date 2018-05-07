@@ -40,7 +40,7 @@ function getMailOpts(userEmail, securityCode) {
     text: (`\n
     您好，欢迎使用 ioly 邮件服务。\n
     您此次操作的动态验证码是：${securityCode}\n
-    该验证码 5 分钟后失效，请及时进行验证。
+    验证码有效期 5 分钟，或使用一次后失效，请及时进行验证。\n
     `),
   };
 }

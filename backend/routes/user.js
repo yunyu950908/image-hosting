@@ -2,22 +2,38 @@ const express = require('express');
 
 const router = express.Router();
 const apiRes = require('../utils/api_response');
-const UserService = require('../services/user');
 const auth = require('../middlewares/auth');
+const UserService = require('../services/user');
 
+/**
+ * /user/mail
+ * @param userInfo email String required
+ * */
+router.post('/mail', (req, res, next) => {
+  (async () => {
+    const { email } = req.body;
+    const result = await UserService.sendSecurityCode(email);
+    return result;
+  })()
+    .then((r) => {
+      res.data = r;
+      apiRes(req, res);
+    })
+    .catch((e) => {
+      next(e);
+    });
+});
 
 /**
  * /user/signup 用户注册
  * */
 router.post('/signup', (req, res, next) => {
   (async () => {
-    // todo 做 email 接收验证码校验, 此处暂时只要是个差不多的字符串就阔以
     const userInfo = req.body;
     const result = await UserService.addNewUser(userInfo);
     return result;
   })()
     .then((r) => {
-      console.log(r);
       res.data = r;
       apiRes(req, res);
     })

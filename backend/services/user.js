@@ -4,6 +4,8 @@ const LoginError = require('../errors/login_error');
 const ErrorCode = require('../errors/error_code');
 const UserModel = require('../models/user');
 const JWTService = require('./jwt_service');
+const RedisService = require('./redis_service');
+const MailService = require('./mail_service');
 
 // pbkdf2
 const pbkdf2Async = require('bluebird').promisify(require('crypto').pbkdf2);
@@ -42,15 +44,40 @@ function verifyEmail(email) {
   }
 }
 
+async function verifySecurityCode(key, code) {
+  const result = await RedisService.get(key);
+  if (!result || result !== code) {
+    throw new HTTPReqParamError(
+      '邮件验证码错误',
+      `mail security code error, key: ${key}, code: ${code}`,
+      'securityCode',
+      ErrorCode.InvalidSecurityCode,
+    );
+  }
+}
+
+/**
+ * sendSecurityCode 发送邮件验证码
+ * @param email String
+ * */
+async function sendSecurityCode(email) {
+  const mailResult = await MailService.sendMail(email);
+  const { securityCode, accepted, messageId } = mailResult;
+  const key = `${accepted}${messageId}`;
+  await RedisService.set(key, securityCode);
+  return { messageId };
+}
+
 /**
  * addNewUser 注册创建新用户
  * @param userInfo email 注册邮箱
  * @param userInfo password 注册密码
  * */
 async function addNewUser(userInfo) {
-  const { email, password } = userInfo;
+  const { email, password, securityCode, messageId } = userInfo;
   verifyEmail(email);
   verifyPassword(password);
+  await verifySecurityCode(`${email}${messageId}`, securityCode);
   const isExist = await UserModel.findUserByEmail(email);
   if (isExist) throw new HTTPReqParamError('该邮箱用户已存在', `duplicate key email: ${email} already exist`, 'email', ErrorCode.UserAlreadyExist);
   const result = await UserModel.createUserByEmailAndPwd({ email, password });
@@ -137,4 +164,5 @@ module.exports = {
   findUserAndUpdate,
   addNewUser,
   userLogin,
+  sendSecurityCode,
 };

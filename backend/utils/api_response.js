@@ -1,7 +1,6 @@
 const { reqLogger } = require('./loggers/loggerGenerator');
 
 module.exports = (req, res) => {
-  debugger;
   if (res.headersSent) {
     reqLogger.error(
       'error sending response: header already sent',

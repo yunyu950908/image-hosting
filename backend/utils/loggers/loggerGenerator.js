@@ -34,9 +34,11 @@ const loggerGenerator = (dirname) => {
 
 const appLogger = loggerGenerator('app');
 const reqLogger = loggerGenerator('req');
+const redisLogger = loggerGenerator('redis');
 
 
 module.exports = {
   appLogger,
   reqLogger,
+  redisLogger,
 };

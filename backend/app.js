@@ -3,6 +3,8 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 require('./services/mongoose_service');
+require('./services/redis_service');
+require('./services/mail_service');
 const { appLogger } = require('./utils/loggers/loggerGenerator');
 const httpErrorHandler = require('./middlewares/http_error_handler');
 const errorHandler = require('./middlewares/error_handler');

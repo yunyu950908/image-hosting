@@ -9,9 +9,6 @@ const PasswordConfig = require('../config/cipher/password_config');
 const { SALT, ITERATIONS, KEYLEN, DIGEST } = PasswordConfig;
 const encryptWithPbkdf2 = password => pbkdf2Async(password, SALT, ITERATIONS, KEYLEN, DIGEST);
 
-const HttpReqParaError = require('../errors/http_request_param_error');
-const ErrorCode = require('../errors/error_code');
-
 const UserSchema = new Schema({
   email: { type: String, required: true, unique: true, index: 1 },
   password: { type: String, required: true },
@@ -88,18 +85,15 @@ async function findUserByEmailAndPwd(userInfo) {
 }
 
 /**
- * findUserAndUpdata todo 临时处理用户数据更新
- * @param userInfo _id String
- * @param userInfo email String
+ * findUserAndUpdata
+ * @param queryInfo Object
  * @param updateInfo Object
  * */
-async function findUserAndUpdate(userInfo, updateInfo) {
-  const { _id, email } = userInfo;
-  const result = await UserModel.findOneAndUpdate({ _id, email }, { ...updateInfo }, { new: true });
+async function findUserAndUpdate(queryInfo, updateInfo) {
+  const result = await UserModel.findOneAndUpdate(queryInfo, updateInfo, { new: true });
   if (!result) return null;
   return {
     email: result.email,
-    hostSetting: result.hostSetting,
   };
 }
 

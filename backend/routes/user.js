@@ -4,6 +4,7 @@ const router = express.Router();
 const apiRes = require('../utils/api_response');
 const auth = require('../middlewares/auth');
 const UserService = require('../services/user');
+const CommonService = require('../services/common_service');
 
 /**
  * /user/mail
@@ -68,29 +69,15 @@ router.post('/login', (req, res, next) => {
 router.post('/update', auth(), (req, res, next) => {
   (async () => {
     const { _id } = req.authInfo;
-    const { email, updateField } = req.body;
-    const result = await UserService.findUserAndUpdate({ _id, email }, req.body, updateField);
-    return result;
-  })()
-    .then((r) => {
-      res.data = r;
-      apiRes(req, res);
-    })
-    .catch((e) => {
-      next(e);
-    });
-});
-
-/**
- * /user/host 获取图床服务器配置
- * */
-
-router.post('/host', auth(), (req, res, next) => {
-  (async () => {
-    console.log(req.authInfo);
-    const { _id } = req.authInfo;
-    const { email } = req.body;
-    const result = UserService.findUserAndUpdate({ _id, email }, {}, 'getHostSetting');
+    const { action } = req.body;
+    let result = null;
+    if (action === 'email') {
+      result = await UserService.userUpdateEmail(_id, req.body);
+    } else if (action === 'pwd') {
+      result = await UserService.userUpdatePwd(_id, req.body);
+    } else {
+      throw CommonService.requiredEmptyError('action');
+    }
     return result;
   })()
     .then((r) => {

@@ -6,6 +6,7 @@ const UserModel = require('../models/user');
 const JWTService = require('./jwt_service');
 const RedisService = require('./redis_service');
 const MailService = require('./mail_service');
+const CommonService = require('./common_service');
 
 // pbkdf2
 const pbkdf2Async = require('bluebird').promisify(require('crypto').pbkdf2);
@@ -44,12 +45,13 @@ function verifyEmail(email) {
   }
 }
 
-async function verifySecurityCode(key, code) {
+async function verifySecurityCode(email, messageId, securityCode) {
+  const key = `${email}${messageId}`;
   const result = await RedisService.get(key);
-  if (!result || result !== code) {
+  if (!result || result !== securityCode) {
     throw new HTTPReqParamError(
-      '邮件验证码错误',
-      `mail security code error, key: ${key}, code: ${code}`,
+      '邮件验证码错误或已失效',
+      `mail security code error, key: ${key}, code: ${securityCode}`,
       'securityCode',
       ErrorCode.InvalidSecurityCode,
     );
@@ -64,7 +66,7 @@ async function sendSecurityCode(email) {
   const mailResult = await MailService.sendMail(email);
   const { securityCode, accepted, messageId } = mailResult;
   const key = `${accepted}${messageId}`;
-  await RedisService.set(key, securityCode);
+  await RedisService.set(key, securityCode, 'Ex', 5 * 60);
   return { messageId };
 }
 
@@ -77,11 +79,12 @@ async function addNewUser(userInfo) {
   const { email, password, securityCode, messageId } = userInfo;
   verifyEmail(email);
   verifyPassword(password);
-  await verifySecurityCode(`${email}${messageId}`, securityCode);
+  await verifySecurityCode(email, messageId, securityCode);
   const isExist = await UserModel.findUserByEmail(email);
   if (isExist) throw new HTTPReqParamError('该邮箱用户已存在', `duplicate key email: ${email} already exist`, 'email', ErrorCode.UserAlreadyExist);
   const result = await UserModel.createUserByEmailAndPwd({ email, password });
   if (!result) throw new InternalServerError('db error');
+  await RedisService.del(`${email}${messageId}`);
   const token = JWTService.setJWT(result._id);
   return {
     email,
@@ -110,59 +113,57 @@ async function userLogin(userInfo) {
   };
 }
 
+
 /**
- * todo findUserAndUpdate 更新用户信息，暂时先这样吧... 很多东西不太熟，之后再研究
+ * userUpdateEmail 更换邮箱
+ * @param _id String required
+ * @param userInfo email String required
+ * @param userInfo newEmail String required
+ * @param userInfo securityCode String required
+ * @param userInfo messageId String required
  * */
-async function findUserAndUpdate(userInfo, updateInfo, updateField) {
-  let updateData = {};
-  switch (updateField) {
-    case 'email': // 更新成功后要求重新登录
-      updateData = { email: updateInfo.email };
-      break;
-    case 'password': // 更新成功后要求重新登录
-      try {
-        const password = await encryptWithPbkdf2(updateInfo.password);
-        updateData = { password };
-      } catch (e) {
-        throw new Error('pbkdf2 加密错误');
-      }
-      break;
-    case 'hostSetting':
-      try {
-        updateData = {
-          hostSetting: {
-            leancloud: {
-              config: {
-                APP_ID: updateInfo.hostSetting.leancloud.config.APP_ID,
-                APP_KEY: updateInfo.hostSetting.leancloud.config.APP_KEY,
-              },
-            },
-          },
-        };
-      } catch (e) {
-        throw new HTTPReqParamError('更新字段内容错误', 'update field error', 'hostSetting', ErrorCode.ParamTypeError);
-      }
-      break;
-    case 'getHostSetting':
-      updateData = {};
-      break;
-    default:
-      throw new HTTPReqParamError('需指定更新字段名，或字段名错误', 'need update field', 'updateField', ErrorCode.RequiredParamEmptyError);
-  }
-  const result = await UserModel.findUserAndUpdate(userInfo, updateData);
-  if (!result) {
-    throw new LoginError(
-      '账户不存在或授权信息错误，请注册或重新登录',
-      `no such user，or invalid auth info ${userInfo.email}`,
-      ErrorCode.NoSuchUser,
-    );
-  }
+async function userUpdateEmail(_id, userInfo) {
+  const { email, newEmail, securityCode, messageId } = userInfo;
+  if (!(email && newEmail && securityCode && messageId)) throw CommonService.requiredEmptyError('email, newEmail, securityCode, messageId');
+  if (email === newEmail) throw new HTTPReqParamError('新旧邮箱不能相同', 'email and newEmail cannot be the same', 'newEmail');
+  verifyEmail(newEmail);
+  await verifySecurityCode(newEmail, messageId, securityCode);
+  const result = await UserModel.findUserAndUpdate({ _id, email }, { email: newEmail });
+  await RedisService.del(`${email}${messageId}`);
+  return result;
+}
+
+/**
+ * userUpdatePwd 更换密码
+ * @param _id String required
+ * @param userInfo email String required
+ * @param userInfo oldPwd String required
+ * @param userInfo newPwd String required
+ * @param userInfo securityCode String required
+ * @param userInfo messageId String required
+ * */
+async function userUpdatePwd(_id, userInfo) {
+  const { email, oldPwd, newPwd, securityCode, messageId } = userInfo;
+  if (!(email && oldPwd && newPwd && securityCode && messageId)) throw CommonService.requiredEmptyError('email, oldPwd, newPwd, securityCode, messageId');
+  if (oldPwd === newPwd) throw new HTTPReqParamError('新旧密码不能相同', 'oldPwd and newPwd cannot be the same', 'newPwd');
+  verifyPassword(newPwd);
+  await verifySecurityCode(email, messageId, securityCode);
+  const encryptOldPwd = await encryptWithPbkdf2(oldPwd);
+  const encryptNewPwd = await encryptWithPbkdf2(newPwd);
+  const result = await UserModel.findUserAndUpdate({
+    email,
+    _id,
+    password: encryptOldPwd,
+  }, { password: encryptNewPwd });
+  if (!result) throw new LoginError('原密码错误', 'oldPwd error');
+  await RedisService.del(`${email}${messageId}`);
   return result;
 }
 
 module.exports = {
-  findUserAndUpdate,
   addNewUser,
   userLogin,
   sendSecurityCode,
+  userUpdateEmail,
+  userUpdatePwd,
 };

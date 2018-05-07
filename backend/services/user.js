@@ -77,12 +77,14 @@ async function sendSecurityCode(email) {
  * */
 async function addNewUser(userInfo) {
   const { email, password, securityCode, messageId } = userInfo;
+  if (!(email && password && securityCode && messageId)) throw CommonService.requiredEmptyError('email, password, securityCode, messageId');
   verifyEmail(email);
   verifyPassword(password);
   await verifySecurityCode(email, messageId, securityCode);
   const isExist = await UserModel.findUserByEmail(email);
   if (isExist) throw new HTTPReqParamError('该邮箱用户已存在', `duplicate key email: ${email} already exist`, 'email', ErrorCode.UserAlreadyExist);
-  const result = await UserModel.createUserByEmailAndPwd({ email, password });
+  const encryptPwd = encryptWithPbkdf2(password);
+  const result = await UserModel.createUserByEmailAndPwd({ email, password: encryptPwd });
   if (!result) throw new InternalServerError('db error');
   await RedisService.del(`${email}${messageId}`);
   const token = JWTService.setJWT(result._id);
@@ -103,7 +105,12 @@ async function userLogin(userInfo) {
   verifyPassword(password);
   const isExist = await UserModel.findUserByEmail(email);
   if (!isExist) throw new LoginError('账户不存在', `no such user ${email}`, ErrorCode.NoSuchUser);
-  const result = await UserModel.findUserByEmailAndPwd({ email, password }, { _id: 1, email: 1, hostSetting: 1 });
+  const encryptPwd = encryptWithPbkdf2(password);
+  const result = await UserModel.findUserByEmailAndPwd({ email, password: encryptPwd }, {
+    _id: 1,
+    email: 1,
+    hostSetting: 1,
+  });
   if (!result) throw new LoginError('密码错误', `password error ${email}`, ErrorCode.PasswordError);
   const token = JWTService.setJWT(result._id);
   return {

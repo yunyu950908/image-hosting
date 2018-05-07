@@ -2,13 +2,6 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-// pbkdf2 加密密码
-const pbkdf2Async = require('bluebird').promisify(require('crypto').pbkdf2);
-const PasswordConfig = require('../config/cipher/password_config');
-
-const { SALT, ITERATIONS, KEYLEN, DIGEST } = PasswordConfig;
-const encryptWithPbkdf2 = password => pbkdf2Async(password, SALT, ITERATIONS, KEYLEN, DIGEST);
-
 const UserSchema = new Schema({
   email: { type: String, required: true, unique: true, index: 1 },
   password: { type: String, required: true },
@@ -61,10 +54,7 @@ async function findUserByEmail(email) {
  * */
 async function createUserByEmailAndPwd(userInfo) {
   const { email, password } = userInfo;
-  // pbkdf2 加密
-  const pwdWithPbkdf2 = await encryptWithPbkdf2(password);
-  // 用加密串创建 user
-  const result = await UserModel.create({ email, password: pwdWithPbkdf2 });
+  const result = await UserModel.create({ email, password });
   if (!result) return null;
   return {
     _id: result._id,
@@ -79,8 +69,7 @@ async function createUserByEmailAndPwd(userInfo) {
  * */
 async function findUserByEmailAndPwd(userInfo) {
   const { email, password } = userInfo;
-  const pwdWithPbkdf2 = await encryptWithPbkdf2(password);
-  const result = await UserModel.findOne({ email, password: pwdWithPbkdf2 }, { password: 0 });
+  const result = await UserModel.findOne({ email, password }, { password: 0 });
   return result;
 }
 

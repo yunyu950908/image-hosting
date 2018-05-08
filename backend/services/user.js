@@ -167,10 +167,25 @@ async function userUpdatePwd(_id, userInfo) {
   return result;
 }
 
+async function handleForgetPwd(userInfo) {
+  const { email, newPwd, securityCode, messageId } = userInfo;
+  if (!(email && newPwd && securityCode && messageId)) throw CommonService.requiredEmptyError('email, newPwd, securityCode, messageId');
+  verifyPassword(newPwd);
+  await verifySecurityCode(email, messageId, securityCode);
+  const encryptNewPwd = await encryptWithPbkdf2(newPwd);
+  const result = await UserModel.findUserAndUpdate({
+    email,
+  }, { password: encryptNewPwd });
+  if (!result) throw new LoginError('账户不存在', 'no such email', ErrorCode.NoSuchUser);
+  await RedisService.del(`${email}${messageId}`);
+  return result;
+}
+
 module.exports = {
   addNewUser,
   userLogin,
   sendSecurityCode,
   userUpdateEmail,
   userUpdatePwd,
+  handleForgetPwd,
 };

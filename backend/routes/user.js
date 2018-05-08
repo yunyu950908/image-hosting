@@ -89,4 +89,21 @@ router.post('/update', auth(), (req, res, next) => {
     });
 });
 
+/**
+ * /user/forget
+ * */
+router.post('/forget', (req, res, next) => {
+  (async () => {
+    const result = await UserService.handleForgetPwd(req.body);
+    return result;
+  })()
+    .then((r) => {
+      res.data = r;
+      apiRes(req, res);
+    })
+    .catch((e) => {
+      next(e);
+    });
+});
+
 module.exports = router;

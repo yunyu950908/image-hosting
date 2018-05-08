@@ -61,6 +61,7 @@ async function verifySecurityCode(email, messageId, securityCode) {
 /**
  * sendSecurityCode 发送邮件验证码
  * @param email String
+ * @return { messageId }
  * */
 async function sendSecurityCode(email) {
   const mailResult = await MailService.sendMail(email);
@@ -74,6 +75,7 @@ async function sendSecurityCode(email) {
  * addNewUser 注册创建新用户
  * @param userInfo email 注册邮箱
  * @param userInfo password 注册密码
+ * @return { email, token }
  * */
 async function addNewUser(userInfo) {
   const { email, password, securityCode, messageId } = userInfo;
@@ -98,6 +100,7 @@ async function addNewUser(userInfo) {
  * userLogin 用户登录
  * @param userInfo email 注册邮箱
  * @param userInfo password 注册密码
+ * @return { email, token, hostSetting }
  * */
 async function userLogin(userInfo) {
   const { email, password } = userInfo;
@@ -128,6 +131,7 @@ async function userLogin(userInfo) {
  * @param userInfo newEmail String required
  * @param userInfo securityCode String required
  * @param userInfo messageId String required
+ * @return { email }
  * */
 async function userUpdateEmail(_id, userInfo) {
   const { email, newEmail, securityCode, messageId } = userInfo;
@@ -148,6 +152,7 @@ async function userUpdateEmail(_id, userInfo) {
  * @param userInfo newPwd String required
  * @param userInfo securityCode String required
  * @param userInfo messageId String required
+ * @return { email }
  * */
 async function userUpdatePwd(_id, userInfo) {
   const { email, oldPwd, newPwd, securityCode, messageId } = userInfo;
@@ -167,6 +172,11 @@ async function userUpdatePwd(_id, userInfo) {
   return result;
 }
 
+/**
+ * handleForgetPwd 忘记密码
+ * @param userInfo email、newPwd、securityCode、messageId
+ * @return { email }
+ * */
 async function handleForgetPwd(userInfo) {
   const { email, newPwd, securityCode, messageId } = userInfo;
   if (!(email && newPwd && securityCode && messageId)) throw CommonService.requiredEmptyError('email, newPwd, securityCode, messageId');

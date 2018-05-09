@@ -44,6 +44,17 @@ async function findUserByEmail(email) {
 }
 
 /**
+ * findUserCommon 通用用户查找
+ * @param userInfo
+ * @return { _id, email, hostSetting }
+ * */
+async function findUserCommon(userInfo) {
+  const result = await UserModel.findOne(userInfo, { password: 0 });
+  if (!result) return null;
+  return result;
+}
+
+/**
  * createUserByEmailAndPwd 通过 email 和 password 创建用户
  * @param userInfo email String 注册邮箱
  * @param userInfo password String 注册密码
@@ -83,6 +94,7 @@ async function findUserAndUpdate(queryInfo, updateInfo) {
 }
 
 module.exports = {
+  findUserCommon,
   findUserAndUpdate,
   findUserByUsername,
   findUserByEmail,

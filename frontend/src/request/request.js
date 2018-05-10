@@ -6,6 +6,7 @@ export const request = axios.create();
 const authToken = window.sessionStorage.getItem(ZHAZHA_TOKEN) || window.localStorage.getItem('zhazha_token') || '';
 
 request.interceptors.request.use((config) => {
+  console.log(config);
   const authInfo = {
     headers: {
       Authorization: `Bearer ${authToken}`,

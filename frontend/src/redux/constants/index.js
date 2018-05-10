@@ -16,8 +16,16 @@ export const USER_UPDATE = 'USER_UPDATE'; // 更新
 export const USER_DELETE = 'USER_DELETE'; // 注销
 export const USER_SIGNUP = 'USER_SIGNUP'; // 注册
 export const USER_LOGIN = 'USER_LOGIN'; // 登录
-export const FETCH_USER_INFO_SUCCESS = 'FETCH_USER_INFO_SUCCESS'; // 请求用户信息成功
-export const FETCH_USER_INFO_ERROR = 'FETCH_USER_INFO_ERROR'; // 请求操作失败
+
+// validate email, pwd, confirmPwd, securityCode
+export const VALIDATE_EMAIL = 'VALIDATE_EMAIL';
+export const VALIDATE_PWD = 'VALIDATE_PWD';
+export const VALIDATE_CONFIRM_PWD = 'VALIDATE_CONFIRM_PWD';
+export const VALIDATE_SECURITY_CODE = 'VALIDATE_SECURITY_CODE';
+export const VALIDATE_CHECKBOX = 'VALIDATE_CHECKBOX';
+export const SECURITY_CODE_LEN = 6;
+export const PWD_MAX_LEN = 16;
+export const PWD_MIN_LEN = 8;
 
 // localStorage
 export const ZHAZHA_USER = 'ZHAZHA_USER';

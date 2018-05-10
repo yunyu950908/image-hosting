@@ -10,11 +10,11 @@ const { Option } = AutoComplete;
 
 class EmailInput extends Component {
   static propTypes = {
-    validateState: {
-      validateInput: {
-        email: PropTypes.string.isRequired,
-      },
-    },
+    validateState: PropTypes.shape({
+      validateInput: PropTypes.shape({
+        email: PropTypes.bool.isRequired,
+      }),
+    }),
     validateEmail: PropTypes.func.isRequired,
   };
 

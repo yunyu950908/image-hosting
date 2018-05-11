@@ -8,7 +8,6 @@ import SignupAndLogin from './signup_and_login';
 
 const UserCenterPage = (props) => {
   const matchUrl = props.match.url;
-  console.log(matchUrl);
   return (
     <section
       id="user-center-page"

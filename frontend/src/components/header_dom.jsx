@@ -43,7 +43,6 @@ class HeaderDOM extends Component {
   }
 
   render() {
-    console.log(this.props.router);
     return (
       <section id="header">
         <Menu
@@ -83,7 +82,6 @@ class HeaderDOM extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     userState: state.userState,
     router: state.router,

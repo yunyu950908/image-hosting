@@ -6,6 +6,7 @@ import {
   SECURITY_CODE_LEN,
   PWD_MAX_LEN,
   PWD_MIN_LEN,
+  MESSAGE_ID,
 } from '../constants';
 
 const initialState = {
@@ -81,7 +82,10 @@ export const validateState = (state = initialState, action = {}) => {
     // 邮箱验证码
     case VALIDATE_SECURITY_CODE: {
       const { messageId, securityCode } = payload;
-      if (messageId) newState.userInput.messageId = messageId;
+      if (messageId) {
+        newState.userInput.messageId = messageId;
+        window.sessionStorage.setItem(MESSAGE_ID, messageId);
+      }
       if (securityCode) {
         newState.userInput.securityCode = securityCode;
         newState.validateInput.securityCode = securityCode.length === SECURITY_CODE_LEN;

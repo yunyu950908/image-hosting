@@ -1,47 +1,30 @@
-import { USER_UPDATE, USER_DELETE, USER_SIGNUP, USER_LOGIN } from '../constants';
+import { USER_UPDATE, USER_DELETE, USER_SIGNUP, USER_LOGIN, USER_LOGOUT } from '../constants';
 
-const cpJSON = obj => JSON.parse(JSON.stringify(obj));
-
-export const updateUserInfo = (data) => {
-  return ({
-    type: USER_UPDATE,
-    payload: {
-      userInfo: data,
-    },
-  });
-};
-
-export const deleteUserInfo = () => ({
-  type: USER_DELETE,
+export const userSignup = data => ({
+  type: USER_SIGNUP,
   payload: {
-    email: '',
+    ...data,
   },
 });
 
-export const userSignup = (data) => {
-  const cpData = cpJSON(data);
-  const { token } = cpData;
-  delete cpData.token;
-  return ({
-    type: USER_SIGNUP,
-    payload: {
-      userInfo: cpData,
-      token,
-    },
-  });
-};
+export const userLogin = data => ({
+  type: USER_LOGIN,
+  payload: {
+    ...data,
+  },
+});
 
-export const userLogin = (data) => {
-  const cpData = cpJSON(data);
-  const { token, rememberMe } = cpData;
-  delete cpData.token;
-  delete cpData.rememberMe;
-  return ({
-    type: USER_LOGIN,
-    payload: {
-      userInfo: cpData,
-      token,
-      rememberMe,
-    },
-  });
-};
+export const userLogout = () => ({
+  type: USER_LOGOUT,
+  payload: {},
+});
+
+export const userUpdate = () => ({
+  type: USER_UPDATE,
+  payload: {},
+});
+
+export const userDelete = () => ({
+  type: USER_DELETE,
+  payload: {},
+});

@@ -91,12 +91,12 @@ class PwdInput extends Component {
     const validateInputField = this.props.isConfirm ? 'confirmPwd' : 'pwd';
     const isAllTrue = Object.values(this.props.validateState.validateInput[validateInputField]).every(v => v);
     return (
-      <section id="pwd-input" style={{ width: 320 }}>
+      <section id="pwd-input">
         <Item
           hasFeedback
           validateStatus={isAllTrue ? 'success' : ''}
           {...PwdInput.itemLayout}
-          label={this.props.isConfirm ? '确认密码' : '密码'}
+          label={this.props.isConfirm ? '确认密码' : '账户密码'}
           colon={false}
           required
         >

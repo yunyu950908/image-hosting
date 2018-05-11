@@ -43,7 +43,7 @@ class EmailInput extends Component {
     if (!value || value.indexOf('@') > -1) {
       domains = [];
     } else {
-      domains = ['gmail.com', 'hotmail.com', '163.com', 'qq.com', '126.com', 'sina.com'].map(domain => `${value}@${domain}`);
+      domains = ['163.com', 'qq.com', 'gmail.com', 'hotmail.com', '126.com', 'sina.com'].map(domain => `${value}@${domain}`);
     }
     this.setState({ domains });
   }
@@ -75,11 +75,11 @@ class EmailInput extends Component {
 
   render() {
     return (
-      <section id="email-input" style={{ width: 320 }}>
+      <section id="email-input">
         <Item
-          {...EmailInput.itemLayout}
           hasFeedback
           validateStatus={this.props.validateState.validateInput.email ? 'success' : ''}
+          {...EmailInput.itemLayout}
           label="邮箱地址"
           colon={false}
           required

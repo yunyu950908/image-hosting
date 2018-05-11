@@ -4,7 +4,7 @@ import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import { Menu, Icon } from 'antd';
 
-import { deleteUserInfo } from '../redux/actions';
+import { userLogout } from '../redux/actions';
 
 import './header_dom.css';
 
@@ -13,10 +13,16 @@ const { SubMenu, ItemGroup } = Menu;
 class HeaderDOM extends Component {
   static propTypes = {
     push: PropTypes.func.isRequired,
-    deleteUserInfo: PropTypes.func.isRequired,
+    userLogout: PropTypes.func.isRequired,
     userState: PropTypes.shape({
-      email: PropTypes.string.isRequired,
-    }).isRequired,
+      email: PropTypes.string,
+    }),
+  };
+
+  static defaultProps = {
+    userState: {
+      email: '',
+    },
   };
 
   constructor() {
@@ -31,18 +37,18 @@ class HeaderDOM extends Component {
       currentKey: key,
     });
     if (key === '/user/logout') {
-      this.props.deleteUserInfo();
+      this.props.userLogout();
     }
     this.props.push(key);
   }
 
   render() {
-    console.log(this.props);
+    console.log(this.props.router);
     return (
       <section id="header">
         <Menu
           onClick={({ key }) => this.changeKey(key)}
-          selectedKeys={[this.state.currentKey]}
+          selectedKeys={[this.props.router.location.pathname]}
           mode="horizontal"
         >
           <Menu.Item key="logo" disabled>
@@ -59,13 +65,14 @@ class HeaderDOM extends Component {
           </Menu.Item>
           <SubMenu title={<span><Icon type="user" />个人中心</span>}>
             {this.props.userState.email ?
-              <ItemGroup key="user" title={this.props.userState.email}>
+              <ItemGroup key="/user" title={this.props.userState.email}>
                 <Menu.Item key="/user">修改信息</Menu.Item>
                 <Menu.Item key="/user/logout">退出登录</Menu.Item>
               </ItemGroup> :
-              <ItemGroup key="user" title="暂未登录">
-                <Menu.Item key="/user/sign">注册</Menu.Item>
+              <ItemGroup key="/user" title="暂未登录">
+                <Menu.Item key="/user/signup">注册</Menu.Item>
                 <Menu.Item key="/user/login">登录</Menu.Item>
+                <Menu.Item key="/user/forget" style={{ display: 'none' }}>忘记密码</Menu.Item>
               </ItemGroup>
             }
           </SubMenu>
@@ -75,6 +82,12 @@ class HeaderDOM extends Component {
   }
 }
 
-const mapStateToProps = state => ({ userState: state.userState });
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    userState: state.userState,
+    router: state.router,
+  };
+};
 
-export default connect(mapStateToProps, { push, deleteUserInfo })(HeaderDOM);
+export default connect(mapStateToProps, { push, userLogout })(HeaderDOM);

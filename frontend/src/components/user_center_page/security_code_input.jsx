@@ -82,11 +82,11 @@ class SecurityCodeInput extends Component {
 
   render() {
     return (
-      <section id="security-code-input" style={{ width: 320 }}>
+      <section id="security-code-input">
         <Item
           {...SecurityCodeInput.itemLayout}
           hasFeedback
-          validateStatus={this.props.validateState.validateInput.securityCode ? 'success' : 'warning'}
+          validateStatus={this.props.validateState.validateInput.securityCode ? 'success' : ''}
           label="验证码"
           colon={false}
           required

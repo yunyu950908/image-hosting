@@ -64,7 +64,7 @@ class Login extends Component {
         message.success('登录成功！');
         // 提交 action
         this.props.userLogin({ ...data.data, [REMEMBER_ME]: this.state[REMEMBER_ME] });
-        this.props.replace('/user');
+        window.location.replace('/setting');
         return null;
       })
       .catch((err) => {

@@ -226,15 +226,14 @@ class Setting extends Component {
     return (
       <section
         className="d-flex"
-        style={{ padding: '0 64px' }}
+        style={this.props.userState.email ? { padding: '0 64px' } : {}}
       >
         {this.props.userState.email ?
           this.cardsGenerator() :
-          <div className="alert alert-warning" role="alert">
-            {/* 注册登录后，上传历史自动同步到云端，更换电脑也不怕记录丢失 */}
+          <div className="alert" role="alert">
             <Divider orientation="left">友情提醒 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</Divider>
-            <h5 className="text-center">
-              需登录后才能配置私人存储空间 ( 还没注册？<Button type="primary">戳我注册</Button> 已有账号 <Button>立即登录</Button> )
+            <h5 className="text-center font-weight-light">
+              需登录后才能配置私人存储空间（ 还没注册？<Button type="primary">戳我注册</Button> 已有账号？<Button>立即登录</Button> ）
             </h5>
             <Divider orientation="right">友情提醒 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</Divider>
           </div>

@@ -33,7 +33,7 @@ class App extends Component {
       const { APP_ID, APP_KEY } = leancloud;
       if (APP_ID && APP_KEY && email) initLeancloud(APP_ID, APP_KEY, email);
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   }
 

@@ -23,6 +23,9 @@ import App from './App/App';
 // history
 import history from './utils/history';
 
+// 改写了下 console.log
+import './utils/logger';
+
 // clipboard
 const clipboard = new ClipboardJS('#copyCodeBtn');
 clipboard.on('success', () => message.success('成功复制到剪切板'));

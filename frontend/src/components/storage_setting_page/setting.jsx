@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, Button, Card, Row, Col, message } from 'antd';
+import { Form, Input, Button, Card, Row, Col, message, Divider } from 'antd';
 import { connect } from 'react-redux';
 
 import { updateHostSetting } from '../../redux/actions';
@@ -12,13 +12,23 @@ const { Item } = Form;
 class Setting extends Component {
   static propTypes = {
     userState: PropTypes.shape({
-      email: PropTypes.string.isRequired,
+      email: PropTypes.string,
       hostSetting: PropTypes.shape({
-        leancloud: PropTypes.shape({}).isRequired,
-        qiniu: PropTypes.shape({}).isRequired,
-      }).isRequired,
-    }).isRequired,
+        leancloud: PropTypes.shape({}),
+        qiniu: PropTypes.shape({}),
+      }),
+    }),
     updateHostSetting: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    userState: {
+      email: '',
+      hostSetting: {
+        leancloud: {},
+        qiniu: {},
+      },
+    },
   };
 
   static itemLayout = {
@@ -28,12 +38,15 @@ class Setting extends Component {
 
   constructor(props) {
     super(props);
-    const { hostSetting } = this.props.userState;
-    this.keys = Object.keys(hostSetting);
     const editCtrl = {};
-    this.keys.forEach((hostName) => {
-      editCtrl[hostName] = true;
-    });
+    let hostSetting = {};
+    if (this.props.userState.email) {
+      hostSetting = this.props.userState;
+      this.keys = Object.keys(hostSetting);
+      this.keys.forEach((hostName) => {
+        editCtrl[hostName] = true;
+      });
+    }
     this.state = {
       editCtrl,
       lastEdit: JSON.parse(JSON.stringify(hostSetting)),
@@ -113,8 +126,8 @@ class Setting extends Component {
       });
   }
 
-  render() {
-    const cards = this.keys.map((hostName) => {
+  cardsGenerator() {
+    return this.keys.map((hostName) => {
       const settingValue = this.state.hostSetting[hostName];
       let KEY1 = '';
       let KEY2 = '';
@@ -207,12 +220,25 @@ class Setting extends Component {
           </Form>
         </Card>);
     });
+  }
+
+  render() {
     return (
       <section
         className="d-flex"
         style={{ padding: '0 64px' }}
       >
-        {cards}
+        {this.props.userState.email ?
+          this.cardsGenerator() :
+          <div className="alert alert-warning" role="alert">
+            {/* 注册登录后，上传历史自动同步到云端，更换电脑也不怕记录丢失 */}
+            <Divider orientation="left">友情提醒 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</Divider>
+            <h5 className="text-center">
+              需登录后才能配置私人存储空间 ( 还没注册？<Button type="primary">戳我注册</Button> 已有账号 <Button>立即登录</Button> )
+            </h5>
+            <Divider orientation="right">友情提醒 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</Divider>
+          </div>
+        }
       </section>
     );
   }

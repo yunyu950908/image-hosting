@@ -3,10 +3,13 @@ export const UPLOAD_SUCCESS = 'UPLOAD_SUCCESS';
 export const UPLOAD_FAILED = 'UPLOAD_FAILED';
 
 // request
+// 注册
 export const FETCH_SIGNUP_SUCCESS = 'FETCH_SIGNUP_SUCCESS';
 export const FETCH_SIGNUP_FAILED = 'FETCH_SIGNUP_FAILED';
+// 忘记密码
 export const FETCH_FORGET_SUCCESS = 'FETCH_FORGET_SUCCESS';
 export const FETCH_FORGET_FAILED = 'FETCH_FORGET_FAILED';
+// 登录
 export const FETCH_LOGIN_SUCCESS = 'FETCH_LOGIN_SUCCESS';
 export const FETCH_LOGIN_FAILED = 'FETCH_LOGIN_FAILED';
 
@@ -23,6 +26,7 @@ export const ERROR = 'ERROR';
 export const USER_UPDATE = 'USER_UPDATE'; // 更新
 export const USER_DELETE = 'USER_DELETE'; // 注销
 export const USER_LOGOUT = 'USER_LOGOUT'; // 登出
+export const UPDATE_HOST_SETTING = 'UPDATE_HOST_SETTING'; // 更新hostSetting
 export const REMEMBER_ME = 'REMEMBER_ME';
 
 // validate email, pwd, confirmPwd, securityCode

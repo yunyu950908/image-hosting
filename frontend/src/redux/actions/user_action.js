@@ -1,7 +1,6 @@
 import { message } from 'antd';
 
 import {
-  USER_UPDATE,
   USER_DELETE,
   USER_LOGOUT,
   FETCH_SIGNUP_SUCCESS,
@@ -12,6 +11,7 @@ import {
   REMEMBER_ME,
   FETCH_LOGIN_SUCCESS,
   FETCH_LOGIN_FAILED,
+  UPDATE_HOST_SETTING,
 } from '../constants';
 import * as API from '../../request';
 
@@ -20,38 +20,35 @@ const sleep = async (ms) => {
   return result;
 };
 
-export const userLogout = () => ({
-  type: USER_LOGOUT,
-  payload: {},
-});
-
-export const userUpdate = () => ({
-  type: USER_UPDATE,
-  payload: {},
-});
-
-export const userDelete = () => ({
-  type: USER_DELETE,
-  payload: {},
-});
-
-// async action
-function userSignup(signupInfo) {
+/**
+ * userSignup 用户注册/忘记密码重设
+ * @param userInfo email String
+ * @param userInfo password String
+ * @param userInfo securityCode String
+ * @param userInfo messageId String
+ * @param target String
+ * @return async function(dispatch){}
+ * */
+function userSignup(userInfo, target) {
+  const successType = target === 'signup' ? FETCH_SIGNUP_SUCCESS : FETCH_FORGET_SUCCESS;
+  const failedType = target === 'signup' ? FETCH_SIGNUP_FAILED : FETCH_FORGET_FAILED;
+  const tips = target === 'signup' ? '注册成功！' : '修改成功！请重新登录...';
+  const api = target === 'signup' ? API.fetchSignup : API.fetchForget;
   return async function fetchUserSignup(dispatch) {
     try {
-      const { data } = await API.fetchSignup(signupInfo);
+      const { data } = await api(userInfo);
       const { code, msg } = data;
       if (code !== 0) {
         message.error(msg);
         dispatch({
-          type: FETCH_SIGNUP_FAILED,
+          type: failedType,
           payload: {},
         });
       } else {
-        message.success('注册成功！');
+        message.success(tips);
         await sleep(500);
         dispatch({
-          type: FETCH_SIGNUP_SUCCESS,
+          type: successType,
           payload: data.data,
         });
       }
@@ -59,71 +56,19 @@ function userSignup(signupInfo) {
       console.error(e);
       message.error('服务器开小差了... 请稍后再试，或尝试联系管理员...');
       dispatch({
-        type: FETCH_SIGNUP_FAILED,
+        type: failedType,
         payload: {},
       });
     }
   };
 }
 
-// async action
-function userForget(updateInfo) {
-  return async function fetchUserForget(dispatch) {
-    try {
-      const { data } = await API.fetchForget(updateInfo);
-      const { code, msg } = data;
-      if (code !== 0) {
-        message.error(msg);
-        dispatch({
-          type: FETCH_FORGET_FAILED,
-          payload: {},
-        });
-      } else {
-        message.success('修改成功！请重新登录...');
-        await new Promise(rsv => window.setTimeout(rsv, 500));
-        dispatch({
-          type: FETCH_FORGET_SUCCESS,
-          payload: data.data,
-        });
-      }
-    } catch (e) {
-      console.error(e);
-      message.error('服务器开小差了... 请稍后再试，或尝试联系管理员...');
-      dispatch({
-        type: FETCH_FORGET_FAILED,
-        payload: {},
-      });
-    }
-  };
-}
-
-export const fetchUserSignup = (validateState, target) => {
-  let lock = true;
-  const { validateInput, userInput } = validateState;
-  // 确保邮箱，密码，邮箱验证码，送信id，同意注册协议都为真
-  const isPwdAllTrue = Object.values(validateInput.pwd).every(v => v) && Object.values(validateInput.confirmPwd).every(v => v);
-  const messageId = userInput.messageId || window.sessionStorage.getItem(MESSAGE_ID);
-  if (!validateInput.email) {
-    message.error('email 地址错误，请检查后重试！');
-  } else if (!isPwdAllTrue) {
-    message.error('密码格式有误，请检查后重试！');
-  } else if (!messageId) {
-    message.error('请重新获取新的邮件验证码！');
-  } else if (!validateInput.securityCode) {
-    message.error('邮件验证码格式错误！');
-  } else {
-    lock = false;
-  }
-  if (lock) return { type: '', payload: {} };
-  const prepareSignupInfo = {
-    email: userInput.email,
-    password: userInput.pwd,
-    securityCode: userInput.securityCode,
-    messageId: userInput.messageId,
-  };
-  return target === 'signup' ? userSignup(prepareSignupInfo) : userForget(prepareSignupInfo);
-};
-
+/**
+ * userLogin 用户登录
+ * @param loginInfo email String
+ * @param loginInfo password String
+ * @return async function(dispatch){}
+ * */
 function userLogin(loginInfo) {
   return async function fetchUserLogin(dispatch) {
     try {
@@ -153,6 +98,33 @@ function userLogin(loginInfo) {
   };
 }
 
+export const fetchUserSignup = (validateState, target) => {
+  let lock = true;
+  const { validateInput, userInput } = validateState;
+  // 确保邮箱，密码，邮箱验证码，送信id，同意注册协议都为真
+  const isPwdAllTrue = Object.values(validateInput.pwd).every(v => v) && Object.values(validateInput.confirmPwd).every(v => v);
+  const messageId = userInput.messageId || window.sessionStorage.getItem(MESSAGE_ID);
+  if (!validateInput.email) {
+    message.error('email 地址错误，请检查后重试！');
+  } else if (!isPwdAllTrue) {
+    message.error('密码格式有误，请检查后重试！');
+  } else if (!messageId) {
+    message.error('请重新获取新的邮件验证码！');
+  } else if (!validateInput.securityCode) {
+    message.error('邮件验证码格式错误！');
+  } else {
+    lock = false;
+  }
+  if (lock) return { type: '', payload: {} };
+  const prepareSignupInfo = {
+    email: userInput.email,
+    password: userInput.pwd,
+    securityCode: userInput.securityCode,
+    messageId: userInput.messageId,
+  };
+  return userSignup(prepareSignupInfo, target);
+};
+
 export const fetchUserLogin = (validateState, isRemember) => {
   let lock = true;
   const { validateInput, userInput } = validateState;
@@ -173,3 +145,19 @@ export const fetchUserLogin = (validateState, isRemember) => {
   };
   return userLogin(prepareLoginInfo);
 };
+
+
+export const userLogout = () => ({
+  type: USER_LOGOUT,
+  payload: {},
+});
+
+export const updateHostSetting = hostSetting => ({
+  type: UPDATE_HOST_SETTING,
+  payload: { hostSetting },
+});
+
+export const userDelete = () => ({
+  type: USER_DELETE,
+  payload: {},
+});

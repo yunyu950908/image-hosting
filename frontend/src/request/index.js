@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import request from './request';
+import { request } from './request';
 import * as API from './apis';
 
 /**
@@ -56,9 +56,23 @@ async function fetchForget(userInfo) {
   return result;
 }
 
+async function fetchStore(providerName, providerConfig) {
+  const result = await request({
+    method: 'post',
+    url: API.USER_STORE,
+    data: {
+      action: 'set',
+      providerName,
+      providerConfig,
+    },
+  });
+  return result;
+}
+
 export {
   fetchSignup,
   fetchLogin,
   fetchMail,
   fetchForget,
+  fetchStore,
 };

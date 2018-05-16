@@ -7,6 +7,7 @@ import {
   ZHAZHA_USER,
   REMEMBER_ME,
   FETCH_SIGNUP_SUCCESS,
+  FETCH_FORGET_SUCCESS,
 } from '../constants';
 
 const userInfo = window.sessionStorage.getItem(ZHAZHA_USER) || window.localStorage.getItem(ZHAZHA_USER) || '{}';
@@ -53,6 +54,10 @@ export const userState = (state = initialState, action = initialAction) => {
       clearStorage();
       setLocalStorage(payload);
       window.location.replace('/');
+      break;
+    case FETCH_FORGET_SUCCESS:
+      clearStorage();
+      window.location.replace('/user/login');
       break;
     case USER_LOGOUT:
     case USER_UPDATE:

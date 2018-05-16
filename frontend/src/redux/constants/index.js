@@ -5,6 +5,8 @@ export const UPLOAD_FAILED = 'UPLOAD_FAILED';
 // request
 export const FETCH_SIGNUP_SUCCESS = 'FETCH_SIGNUP_SUCCESS';
 export const FETCH_SIGNUP_FAILED = 'FETCH_SIGNUP_FAILED';
+export const FETCH_FORGET_SUCCESS = 'FETCH_FORGET_SUCCESS';
+export const FETCH_FORGET_FAILED = 'FETCH_FORGET_FAILED';
 
 // host target
 export const LEANCLOUD = 'LEANCLOUD';
@@ -31,6 +33,7 @@ export const SECURITY_CODE_LEN = 6;
 export const PWD_MAX_LEN = 16;
 export const PWD_MIN_LEN = 8;
 export const MESSAGE_ID = 'MESSAGE_ID';
+export const CLEAR_VALIDATE_STATE = 'CLEAR_VALIDATE_STATE';
 
 // localStorage
 export const ZHAZHA_USER = 'ZHAZHA_USER';

@@ -8,6 +8,8 @@ import {
   FETCH_SIGNUP_SUCCESS,
   FETCH_SIGNUP_FAILED,
   MESSAGE_ID,
+  FETCH_FORGET_SUCCESS,
+  FETCH_FORGET_FAILED,
 } from '../constants';
 import * as API from '../../request';
 
@@ -42,7 +44,7 @@ function userSignup(signupInfo) {
       if (code !== 0) {
         message.error(msg);
         dispatch({
-          type: '',
+          type: FETCH_SIGNUP_FAILED,
           payload: {},
         });
       } else {
@@ -58,6 +60,37 @@ function userSignup(signupInfo) {
       message.error('服务器开小差了... 请稍后再试，或尝试联系管理员...');
       dispatch({
         type: FETCH_SIGNUP_FAILED,
+        payload: {},
+      });
+    }
+  };
+}
+
+// async action
+function userForget(updateInfo) {
+  return async function fetchUserForget(dispatch) {
+    try {
+      const { data } = await API.fetchForget(updateInfo);
+      const { code, msg } = data;
+      if (code !== 0) {
+        message.error(msg);
+        dispatch({
+          type: FETCH_FORGET_FAILED,
+          payload: {},
+        });
+      } else {
+        message.success('修改成功！');
+        await new Promise(rsv => window.setTimeout(rsv, 1000));
+        dispatch({
+          type: FETCH_FORGET_SUCCESS,
+          payload: data.data,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      message.error('服务器开小差了... 请稍后再试，或尝试联系管理员...');
+      dispatch({
+        type: FETCH_FORGET_FAILED,
         payload: {},
       });
     }
@@ -88,5 +121,5 @@ export const fetchUserSignup = (validateState, target) => {
     securityCode: userInput.securityCode,
     messageId: userInput.messageId,
   };
-  return target === 'signup' ? userSignup(prepareSignupInfo) : '';
+  return target === 'signup' ? userSignup(prepareSignupInfo) : userForget(prepareSignupInfo);
 };

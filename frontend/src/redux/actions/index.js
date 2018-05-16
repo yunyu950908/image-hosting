@@ -4,4 +4,5 @@ export {
   validateEmail,
   validatePwd,
   validateSecurityCode,
+  clearValidateState,
 } from './validate_action';

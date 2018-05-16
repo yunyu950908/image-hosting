@@ -3,6 +3,7 @@ import {
   VALIDATE_PWD,
   VALIDATE_CONFIRM_PWD,
   VALIDATE_SECURITY_CODE,
+  CLEAR_VALIDATE_STATE,
 } from '../constants';
 
 export const validateEmail = (email) => ({
@@ -24,4 +25,9 @@ export const validateSecurityCode = (code, isMsgId = false) => ({
   payload: {
     [isMsgId ? 'messageId' : 'securityCode']: code,
   },
+});
+
+export const clearValidateState = () => ({
+  type: CLEAR_VALIDATE_STATE,
+  payload: {},
 });

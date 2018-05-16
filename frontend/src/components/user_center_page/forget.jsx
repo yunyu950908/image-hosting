@@ -1,39 +1,76 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { replace, push } from 'react-router-redux';
-import { Form, Input, Popover, Icon, AutoComplete, Button, Checkbox, message } from 'antd';
+import { replace, goBack } from 'react-router-redux';
+import { Form, Button } from 'antd';
 
-import { verifyEmail, verifyPassword } from '../../utils/verify';
-import * as API from '../../request';
-import { userLogin, userSignup } from '../../redux/actions';
+import { fetchUserSignup } from '../../redux/actions';
 
-const { Item } = Form;
-const { Search } = Input;
-const AutoCompleteOption = AutoComplete.Option;
+import EmailItem from './email_input';
+import SecurityCodeItem from './security_code_input';
+import PwdItem from './pwd_input';
 
-class Forget extends Component {
-  render(){
-    return (
-      <section id="forget">
-        forget
-        {/*<Item*/}
-          {/*labelCol={}*/}
-          {/*wrapperCol={}*/}
-          {/*label="验证码"*/}
-          {/*colon={false}*/}
-          {/*required*/}
-        {/*>*/}
-          {/*<Search*/}
-            {/*placeholder="邮箱验证码"*/}
-            {/*enterButton={this.state.isSent === 60 ? '获取验证码' : `重新获取(${this.state.isSent})`}*/}
-            {/*onSearch={() => this.fetchSecurityCode()}*/}
-            {/*onChange={e => this.changeUserInput(e.target.value, 'securityCode')}*/}
-          {/*/>*/}
-        {/*</Item>*/}
-      </section>
-    )
-  }
-}
+const Forget = props => (
+  <section id="forget" style={{ width: 320 }}>
+    <Form>
+      <EmailItem />
+      <SecurityCodeItem />
+      <PwdItem labelName="新密码" />
+      <PwdItem labelName="确认密码" />
+      <div className="d-flex flex-column">
+        <Button
+          style={{ marginBottom: 24 }}
+          type="primary"
+          onClick={() => props.fetchUserSignup(props.validateState, 'forget')}
+        >
+          戳我确认
+        </Button>
+        <Button onClick={() => props.goBack(1)}>返回</Button>
+      </div>
+    </Form>
+  </section>
+);
 
-export default Forget;
+Forget.propTypes = {
+  goBack: PropTypes.func.isRequired,
+  fetchUserSignup: PropTypes.func.isRequired,
+  validateState: PropTypes.shape({
+    validateInput: PropTypes.shape({
+      email: PropTypes.bool.isRequired,
+      pwd: PropTypes.shape({
+        hasEnoughChars: PropTypes.bool.isRequired,
+        hasNum: PropTypes.bool.isRequired,
+        hasLowercase: PropTypes.bool.isRequired,
+        hasUppercase: PropTypes.bool.isRequired,
+      }),
+      confirmPwd: PropTypes.shape({
+        hasEnoughChars: PropTypes.bool.isRequired,
+        hasNum: PropTypes.bool.isRequired,
+        hasLowercase: PropTypes.bool.isRequired,
+        hasUppercase: PropTypes.bool.isRequired,
+        isSame: PropTypes.bool.isRequired,
+      }),
+    }),
+    userInput: PropTypes.shape({
+      email: PropTypes.string.isRequired,
+      pwd: PropTypes.string.isRequired,
+      confirmPwd: PropTypes.string.isRequired,
+      securityCode: PropTypes.string.isRequired,
+      messageId: PropTypes.string.isRequired,
+    }),
+  }),
+};
+
+Forget.defaultProps = {
+  validateState: {
+    validateInput: {},
+    userInput: {},
+  },
+};
+
+const mapStateToProps = (state) => {
+  const { validateState } = state;
+  return { validateState };
+};
+
+export default connect(mapStateToProps, { goBack, replace, fetchUserSignup })(Forget);

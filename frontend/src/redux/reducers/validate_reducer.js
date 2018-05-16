@@ -7,6 +7,7 @@ import {
   PWD_MAX_LEN,
   PWD_MIN_LEN,
   MESSAGE_ID,
+  CLEAR_VALIDATE_STATE,
 } from '../constants';
 
 const initialState = {
@@ -91,6 +92,9 @@ export const validateState = (state = initialState, action = {}) => {
         newState.validateInput.securityCode = securityCode.length === SECURITY_CODE_LEN;
       }
     }
+      break;
+    case CLEAR_VALIDATE_STATE:
+      Object.assign(newState, initialState);
       break;
     default:
   }

@@ -4,7 +4,7 @@ import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import { Menu, Icon } from 'antd';
 
-import { userLogout } from '../redux/actions';
+import { userLogout, clearValidateState } from '../redux/actions';
 
 import './header_dom.css';
 
@@ -14,9 +14,15 @@ class HeaderDOM extends Component {
   static propTypes = {
     push: PropTypes.func.isRequired,
     userLogout: PropTypes.func.isRequired,
+    clearValidateState: PropTypes.func.isRequired,
     userState: PropTypes.shape({
       email: PropTypes.string,
     }),
+    router: PropTypes.shape({
+      location: PropTypes.shape({
+        pathname: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -25,18 +31,9 @@ class HeaderDOM extends Component {
     },
   };
 
-  constructor() {
-    super();
-    this.state = {
-      currentKey: '/',
-    };
-  }
-
   changeKey(key) {
-    this.setState({
-      currentKey: key,
-    });
     if (key === '/user/logout') {
+      this.props.clearValidateState();
       this.props.userLogout();
     }
     this.props.push(key);
@@ -88,4 +85,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { push, userLogout })(HeaderDOM);
+export default connect(mapStateToProps, { push, userLogout, clearValidateState })(HeaderDOM);

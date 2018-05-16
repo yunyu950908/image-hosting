@@ -47,8 +47,18 @@ async function fetchMail(userInfo) {
   return result;
 }
 
+async function fetchForget(userInfo) {
+  const result = await axios({
+    method: 'post',
+    url: API.USER_FORGET,
+    data: userInfo,
+  });
+  return result;
+}
+
 export {
   fetchSignup,
   fetchLogin,
   fetchMail,
+  fetchForget,
 };

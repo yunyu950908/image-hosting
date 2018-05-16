@@ -5,6 +5,7 @@ import { Route } from 'react-router-dom';
 // import {} from 'react-router-redux';
 
 import SignupAndLogin from './signup_and_login';
+import Forget from './forget';
 
 const UserCenterPage = (props) => {
   const matchUrl = props.match.url;
@@ -17,6 +18,7 @@ const UserCenterPage = (props) => {
       <Route path={`${matchUrl}/signup`} component={SignupAndLogin} />
       <Route path={`${matchUrl}/login`} component={SignupAndLogin} />
       <Route path={`${matchUrl}/logout`} component={SignupAndLogin} />
+      <Route path={`${matchUrl}/forget`} component={Forget} />
     </section>
   );
 };

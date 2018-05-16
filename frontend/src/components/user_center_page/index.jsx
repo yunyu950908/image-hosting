@@ -6,6 +6,7 @@ import { Route } from 'react-router-dom';
 
 import SignupAndLogin from './signup_and_login';
 import Forget from './forget';
+import UserInfo from './user_info';
 
 const UserCenterPage = (props) => {
   const matchUrl = props.match.url;
@@ -14,7 +15,7 @@ const UserCenterPage = (props) => {
       id="user-center-page"
       // className="d-flex justify-content-center align-items-center"
     >
-      <Route exact path={`${matchUrl}`} component={() => <div>user</div>} />
+      <Route exact path={`${matchUrl}`} component={UserInfo} />
       <Route path={`${matchUrl}/signup`} component={SignupAndLogin} />
       <Route path={`${matchUrl}/login`} component={SignupAndLogin} />
       <Route path={`${matchUrl}/logout`} component={SignupAndLogin} />

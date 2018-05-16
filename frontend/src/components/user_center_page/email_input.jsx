@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Form, Popover, Icon, AutoComplete } from 'antd';
+import { Form, Popover, Icon, AutoComplete, Input } from 'antd';
 
 import { validateEmail } from '../../redux/actions';
 
@@ -16,6 +16,7 @@ class EmailInput extends Component {
       }),
     }),
     validateEmail: PropTypes.func.isRequired,
+    edit: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -24,6 +25,7 @@ class EmailInput extends Component {
         email: false,
       },
     },
+    edit: false,
   };
 
   static itemLayout = {
@@ -82,17 +84,20 @@ class EmailInput extends Component {
           {...EmailInput.itemLayout}
           label="邮箱地址"
           colon={false}
-          required
+          required={this.props.edit}
         >
-          <Popover placement="right" content={this.tipsGen()} trigger="focus">
-            <AutoComplete
-              placeholder="示例: ioly@ioly.top"
-              onSearch={e => this.handleSearch(e)}
-              onChange={e => this.props.validateEmail(e)}
-            >
-              {this.autoOptsGen()}
-            </AutoComplete>
-          </Popover>
+          {this.props.edit ?
+            <Popover placement="right" content={this.tipsGen()} trigger="focus">
+              <AutoComplete
+                placeholder="示例: ioly@ioly.top"
+                onSearch={e => this.handleSearch(e)}
+                onChange={e => this.props.validateEmail(e)}
+              >
+                {this.autoOptsGen()}
+              </AutoComplete>
+            </Popover> :
+            <Input defaultValue={this.props.userState.email} disabled={true} />
+          }
         </Item>
       </section>
     );
@@ -100,8 +105,8 @@ class EmailInput extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { validateState } = state;
-  return { validateState };
+  const { validateState, userState } = state;
+  return { validateState, userState };
 };
 
 export default connect(mapStateToProps, { validateEmail })(EmailInput);

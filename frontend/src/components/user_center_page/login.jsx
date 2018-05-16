@@ -62,6 +62,7 @@ class Login extends Component {
         const { code, msg } = data;
         if (code !== 0) return message.error(msg);
         message.success('登录成功！');
+        // await new Promise(rsv => window.setTimeout(rsv,1000))
         // 提交 action
         this.props.userLogin({ ...data.data, [REMEMBER_ME]: this.state[REMEMBER_ME] });
         window.location.replace('/setting');

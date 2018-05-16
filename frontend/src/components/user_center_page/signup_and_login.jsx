@@ -16,12 +16,14 @@ class SignupAndLogin extends Component {
     }).isRequired,
   };
 
+  static edit = true;
+
   render() {
     const { path } = this.props.match;
     return (
       <section id="signup-and-login" style={{ width: 320 }}>
         <Form layout="horizontal">
-          <EmailItem />
+          <EmailItem edit={SignupAndLogin.edit} />
           {path === '/user/signup' ? <SecurityCodeItem /> : null}
           <PwdItem labelName="账户密码" />
           {path === '/user/signup' ? <PwdItem labelName="确认密码" /> : null}

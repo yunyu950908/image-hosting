@@ -79,7 +79,7 @@ function userForget(updateInfo) {
           payload: {},
         });
       } else {
-        message.success('修改成功！');
+        message.success('修改成功！请重新登录...');
         await new Promise(rsv => window.setTimeout(rsv, 1000));
         dispatch({
           type: FETCH_FORGET_SUCCESS,

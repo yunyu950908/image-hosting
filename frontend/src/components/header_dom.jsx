@@ -60,7 +60,7 @@ class HeaderDOM extends Component {
           <SubMenu title={<span><Icon type="user" />个人中心</span>}>
             {this.props.userState.email ?
               <ItemGroup key="/user" title={this.props.userState.email}>
-                <Menu.Item key="/user">修改信息</Menu.Item>
+                <Menu.Item key="/user">个人信息</Menu.Item>
                 <Menu.Item key="/user/logout">退出登录</Menu.Item>
               </ItemGroup> :
               <ItemGroup key="/user" title="暂未登录">

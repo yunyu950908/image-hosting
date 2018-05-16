@@ -126,7 +126,7 @@ router.post('/store', auth(), (req, res, next) => {
       result = await UserModel.findUserCommon({ _id });
     } else if (action === 'set') {
       if (!(providerName && providerConfig)) throw CommonService.requiredEmptyError('providerName, providerConfig');
-      result = await UserModel.findUserAndUpdate({ _id }, { [providerName]: providerConfig });
+      result = await UserModel.findUserAndUpdate({ _id }, { hostSetting: { [providerName]: providerConfig } });
     } else {
       throw new HTTPReqParamError('action 行为错误，必须是 set / get ', `invalid action type ${action}`, 'action');
     }

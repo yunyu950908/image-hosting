@@ -91,6 +91,7 @@ async function findUserAndUpdate(queryInfo, updateInfo) {
   if (!result) return null;
   return {
     email: result.email,
+    hostSetting: result.hostSetting,
   };
 }
 

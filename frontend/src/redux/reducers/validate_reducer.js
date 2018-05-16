@@ -8,6 +8,7 @@ import {
   PWD_MIN_LEN,
   MESSAGE_ID,
   CLEAR_VALIDATE_STATE,
+  USER_LOGOUT,
 } from '../constants';
 
 const initialState = {
@@ -94,6 +95,9 @@ export const validateState = (state = initialState, action = {}) => {
     }
       break;
     case CLEAR_VALIDATE_STATE:
+      Object.assign(newState, initialState);
+      break;
+    case USER_LOGOUT:
       Object.assign(newState, initialState);
       break;
     default:

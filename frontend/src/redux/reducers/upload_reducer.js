@@ -1,4 +1,4 @@
-import { UPLOAD_FAILED, UPLOAD_SUCCESS } from '../constants/index';
+import { UPLOAD_FAILED, UPLOAD_SUCCESS, USER_LOGOUT } from '../constants/index';
 
 const initialState = {
   success: [],
@@ -20,13 +20,16 @@ export const uploadState = (state = initialState, action = initialAction) => {
   switch (action.type) {
     case UPLOAD_SUCCESS:
       nextState.success.push(action.payload);
-      return nextState;
+      break;
     case UPLOAD_FAILED:
       nextState.failed.push(action.payload.name);
-      return nextState;
+      break;
+    case USER_LOGOUT:
+      Object.assign(nextState, initialState);
+      break;
     default:
-      return state;
   }
+  return nextState;
 };
 
 export default uploadState;

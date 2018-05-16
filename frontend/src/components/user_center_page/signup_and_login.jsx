@@ -10,8 +10,6 @@ import SignupItem from './signup';
 import SecurityCodeItem from './security_code_input';
 
 class SignupAndLogin extends Component {
-  static confirmPwd = true;
-
   static propTypes = {
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -25,8 +23,8 @@ class SignupAndLogin extends Component {
         <Form layout="horizontal">
           <EmailItem />
           {path === '/user/signup' ? <SecurityCodeItem /> : null}
-          <PwdItem />
-          {path === '/user/signup' ? <PwdItem isConfirm={SignupAndLogin.confirmPwd} /> : null}
+          <PwdItem labelName="账户密码" />
+          {path === '/user/signup' ? <PwdItem labelName="确认密码" /> : null}
           {path === '/user/signup' ? <SignupItem /> : <LoginItem />}
         </Form>
       </section>

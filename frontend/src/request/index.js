@@ -1,5 +1,5 @@
 import axios from 'axios';
-import request from './request';
+// import request from './request';
 import * as API from './apis';
 
 /**
@@ -9,7 +9,7 @@ import * as API from './apis';
  * @param userInfo securityCode String
  * @return Promise axios response
  * */
-async function fetchSignUp(userInfo) {
+async function fetchSignup(userInfo) {
   const result = await axios({
     method: 'post',
     url: API.USER_SIGNUP,
@@ -48,7 +48,7 @@ async function fetchMail(userInfo) {
 }
 
 export {
-  fetchSignUp,
+  fetchSignup,
   fetchLogin,
   fetchMail,
 };

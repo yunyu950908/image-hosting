@@ -43,7 +43,7 @@ class EmailInput extends Component {
     if (!value || value.indexOf('@') > -1) {
       domains = [];
     } else {
-      domains = ['163.com', 'qq.com', 'gmail.com', 'hotmail.com', '126.com', 'sina.com'].map(domain => `${value}@${domain}`);
+      domains = ['ioly.top', '163.com', 'qq.com', 'gmail.com', 'hotmail.com', '126.com', 'sina.com'].map(domain => `${value}@${domain}`);
     }
     this.setState({ domains });
   }

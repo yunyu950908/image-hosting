@@ -22,7 +22,7 @@ class PwdInput extends Component {
     }),
     validatePwd: PropTypes.func.isRequired,
     handleEnterPress: PropTypes.func,
-    isConfirm: PropTypes.bool,
+    labelName: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -39,7 +39,6 @@ class PwdInput extends Component {
     },
     handleEnterPress: () => {
     },
-    isConfirm: false,
   };
 
   static itemLayout = {
@@ -88,7 +87,7 @@ class PwdInput extends Component {
   }
 
   render() {
-    const validateInputField = this.props.isConfirm ? 'confirmPwd' : 'pwd';
+    const validateInputField = this.props.labelName === '确认密码' ? 'confirmPwd' : 'pwd';
     const isAllTrue = Object.values(this.props.validateState.validateInput[validateInputField]).every(v => v);
     return (
       <section id="pwd-input">
@@ -96,16 +95,16 @@ class PwdInput extends Component {
           hasFeedback
           validateStatus={isAllTrue ? 'success' : ''}
           {...PwdInput.itemLayout}
-          label={this.props.isConfirm ? '确认密码' : '账户密码'}
+          label={this.props.labelName || ''}
           colon={false}
           required
         >
-          <Popover placement="right" content={this.tipsGen(this.props.isConfirm)} trigger="focus">
+          <Popover placement="right" content={this.tipsGen(this.props.labelName === '确认密码')} trigger="focus">
             <Input
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
               type="password"
               placeholder="8~16 位大小写字母与数字组合"
-              onChange={e => this.props.validatePwd(e.target.value, this.props.isConfirm)}
+              onChange={e => this.props.validatePwd(e.target.value, this.props.labelName === '确认密码')}
               onPressEnter={() => this.props.handleEnterPress()}
             />
           </Popover>

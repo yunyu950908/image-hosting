@@ -66,8 +66,6 @@ class Signup extends Component {
       return message.error('email 地址错误，请检查后重试！');
     } else if (!isPwdAllTrue) {
       return message.error('注册密码有误，请检查后重试！');
-    } else if (!this.state[REMEMBER_ME]) {
-      return message.error('请同意注册协议后重试！');
     } else if (!messageId) {
       return message.error('请重新获取新的邮件验证码！');
     }
@@ -77,6 +75,7 @@ class Signup extends Component {
       securityCode: userInput.securityCode,
       messageId: userInput.messageId,
     };
+    if (!this.state[REMEMBER_ME]) return message.error('请同意注册协议后重试！');
     Signup.fetchLock = true;
     API.fetchSignup(userInfo)
       .then(({ data }) => {
@@ -87,6 +86,7 @@ class Signup extends Component {
         // 提交 action
         this.props.userSignup({ ...data.data, [REMEMBER_ME]: this.state[REMEMBER_ME] });
         this.props.replace('/user');
+        window.location.reload();
         return null;
       })
       .catch((err) => {

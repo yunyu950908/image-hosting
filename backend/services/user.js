@@ -108,7 +108,7 @@ async function userLogin(userInfo) {
   verifyPassword(password);
   const isExist = await UserModel.findUserByEmail(email);
   if (!isExist) throw new LoginError('账户不存在', `no such user ${email}`, ErrorCode.NoSuchUser);
-  const encryptPwd = encryptWithPbkdf2(password);
+  const encryptPwd = await encryptWithPbkdf2(password);
   const result = await UserModel.findUserByEmailAndPwd({ email, password: encryptPwd }, {
     _id: 1,
     email: 1,
@@ -178,11 +178,11 @@ async function userUpdatePwd(_id, userInfo) {
  * @return { email }
  * */
 async function handleForgetPwd(userInfo) {
-  const { email, newPwd, securityCode, messageId } = userInfo;
-  if (!(email && newPwd && securityCode && messageId)) throw CommonService.requiredEmptyError('email, newPwd, securityCode, messageId');
-  verifyPassword(newPwd);
+  const { email, password, securityCode, messageId } = userInfo;
+  if (!(email && password && securityCode && messageId)) throw CommonService.requiredEmptyError('email, password, securityCode, messageId');
+  verifyPassword(password);
   await verifySecurityCode(email, messageId, securityCode);
-  const encryptNewPwd = await encryptWithPbkdf2(newPwd);
+  const encryptNewPwd = await encryptWithPbkdf2(password);
   const result = await UserModel.findUserAndUpdate({
     email,
   }, { password: encryptNewPwd });

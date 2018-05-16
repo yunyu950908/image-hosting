@@ -5,7 +5,7 @@ import { replace, push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { Form, Button, Checkbox, message } from 'antd';
 
-import { fetchUserSignup } from '../../redux/actions';
+import { fetchUserSignup, clearValidateState } from '../../redux/actions';
 import { REMEMBER_ME } from '../../redux/constants';
 
 const { Item } = Form;
@@ -39,6 +39,7 @@ class Signup extends Component {
     }),
     // userSignup: PropTypes.func.isRequired,
     fetchUserSignup: PropTypes.func.isRequired,
+    clearValidateState: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     // push: PropTypes.func.isRequired,
   };
@@ -53,6 +54,10 @@ class Signup extends Component {
   state = {
     [REMEMBER_ME]: true,
   };
+
+  componentDidMount() {
+    this.props.clearValidateState();
+  }
 
   fetchUserSignup() {
     if (!this.state[REMEMBER_ME]) return message.error('请同意注册协议后重试！');
@@ -95,4 +100,9 @@ const mapStateToProps = (state) => {
   return { validateState };
 };
 
-export default connect(mapStateToProps, { push, replace, fetchUserSignup })(Signup);
+export default connect(mapStateToProps, {
+  push,
+  replace,
+  fetchUserSignup,
+  clearValidateState,
+})(Signup);

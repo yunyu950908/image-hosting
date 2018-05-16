@@ -5,7 +5,7 @@ import { replace, push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { Form, Button, Checkbox } from 'antd';
 
-import { fetchUserLogin } from '../../redux/actions';
+import { fetchUserLogin, clearValidateState } from '../../redux/actions';
 import { REMEMBER_ME } from '../../redux/constants';
 
 const { Item } = Form;
@@ -28,6 +28,7 @@ class Login extends Component {
       }),
     }),
     fetchUserLogin: PropTypes.func.isRequired,
+    clearValidateState: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     // push: PropTypes.func.isRequired,
   };
@@ -42,6 +43,10 @@ class Login extends Component {
   state = {
     [REMEMBER_ME]: true,
   };
+
+  componentDidMount() {
+    this.props.clearValidateState();
+  }
 
   render() {
     return (
@@ -79,4 +84,9 @@ const mapStateToProps = (state) => {
   return { validateState };
 };
 
-export default connect(mapStateToProps, { push, replace, fetchUserLogin })(Login);
+export default connect(mapStateToProps, {
+  push,
+  replace,
+  fetchUserLogin,
+  clearValidateState,
+})(Login);

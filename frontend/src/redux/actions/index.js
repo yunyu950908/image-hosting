@@ -1,5 +1,5 @@
 export { uploadFile } from './upload_action';
-export { userSignup, userLogin, userLogout } from './user_action';
+export { userLogin, userLogout,fetchUserSignup } from './user_action';
 export {
   validateEmail,
   validatePwd,

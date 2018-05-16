@@ -2,11 +2,11 @@ import {
   USER_UPDATE,
   USER_DELETE,
   USER_LOGOUT,
-  USER_SIGNUP,
   USER_LOGIN,
   ZHAZHA_TOKEN,
   ZHAZHA_USER,
   REMEMBER_ME,
+  FETCH_SIGNUP_SUCCESS,
 } from '../constants';
 
 const userInfo = window.sessionStorage.getItem(ZHAZHA_USER) || window.localStorage.getItem(ZHAZHA_USER) || '{}';
@@ -49,9 +49,10 @@ export const userState = (state = initialState, action = initialAction) => {
       }
       Object.assign(newState, payload);
       break;
-    case USER_SIGNUP:
+    case FETCH_SIGNUP_SUCCESS:
       clearStorage();
       setLocalStorage(payload);
+      window.location.replace('/');
       break;
     case USER_LOGOUT:
     case USER_UPDATE:

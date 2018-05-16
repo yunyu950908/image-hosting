@@ -2,6 +2,10 @@
 export const UPLOAD_SUCCESS = 'UPLOAD_SUCCESS';
 export const UPLOAD_FAILED = 'UPLOAD_FAILED';
 
+// request
+export const FETCH_SIGNUP_SUCCESS = 'FETCH_SIGNUP_SUCCESS';
+export const FETCH_SIGNUP_FAILED = 'FETCH_SIGNUP_FAILED';
+
 // host target
 export const LEANCLOUD = 'LEANCLOUD';
 export const QINIU = 'QINIU';
@@ -14,7 +18,6 @@ export const ERROR = 'ERROR';
 // user state
 export const USER_UPDATE = 'USER_UPDATE'; // 更新
 export const USER_DELETE = 'USER_DELETE'; // 注销
-export const USER_SIGNUP = 'USER_SIGNUP'; // 注册
 export const USER_LOGIN = 'USER_LOGIN'; // 登录
 export const USER_LOGOUT = 'USER_LOGOUT'; // 登出
 export const REMEMBER_ME = 'REMEMBER_ME';

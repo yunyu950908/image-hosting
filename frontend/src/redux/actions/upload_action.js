@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import {
   UPLOAD_SUCCESS,
   UPLOAD_FAILED,
@@ -21,7 +22,7 @@ const LEAN_CLOUD_REQUEST = fileData => async (dispatch) => {
       payload: { name, url },
     });
   } catch (e) {
-    console.error(e);
+    message.error(`${fileData.name} 上传失败，请检查存储配置后重试`);
     dispatch({
       type: UPLOAD_FAILED,
       payload: { name: fileData.name },

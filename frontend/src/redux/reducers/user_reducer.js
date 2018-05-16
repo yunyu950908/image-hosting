@@ -63,6 +63,7 @@ export const userState = (state = initialState, action = initialAction) => {
     case USER_UPDATE:
     case USER_DELETE:
       clearStorage();
+      window.location.replace('/login');
       return {};
     default:
   }

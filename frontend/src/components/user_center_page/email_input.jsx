@@ -15,6 +15,9 @@ class EmailInput extends Component {
         email: PropTypes.bool.isRequired,
       }),
     }),
+    userState: PropTypes.shape({
+      email: PropTypes.string.isRequired,
+    }).isRequired,
     validateEmail: PropTypes.func.isRequired,
     edit: PropTypes.bool,
   };
@@ -96,7 +99,7 @@ class EmailInput extends Component {
                 {this.autoOptsGen()}
               </AutoComplete>
             </Popover> :
-            <Input defaultValue={this.props.userState.email} disabled={true} />
+            <Input defaultValue={this.props.userState.email} disabled />
           }
         </Item>
       </section>

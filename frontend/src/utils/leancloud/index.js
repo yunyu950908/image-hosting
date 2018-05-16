@@ -1,4 +1,5 @@
-const AV = require('leancloud-storage');
+// const AV = require('leancloud-storage');
+import * as AV from 'leancloud-storage';
 
 let OWNER = '';
 
@@ -7,6 +8,7 @@ export const URL = 'URL';
 export const STREAM = 'STREAM';
 
 function initLeancloud(APP_ID, APP_KEY, ownerEmail) {
+  AV.applicationId = undefined; // 源码里有这项检查，不然没法直接重置
   AV.init({
     appId: APP_ID,
     appKey: APP_KEY,

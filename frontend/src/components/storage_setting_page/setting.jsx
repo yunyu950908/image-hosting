@@ -4,6 +4,7 @@ import { Form, Input, Button, Card, Row, Col, message } from 'antd';
 import { connect } from 'react-redux';
 
 import { updateHostSetting } from '../../redux/actions';
+import { initLeancloud } from '../../utils/leancloud';
 import * as API from '../../request';
 
 const { Item } = Form;
@@ -11,6 +12,7 @@ const { Item } = Form;
 class Setting extends Component {
   static propTypes = {
     userState: PropTypes.shape({
+      email: PropTypes.string.isRequired,
       hostSetting: PropTypes.shape({
         leancloud: PropTypes.shape({}).isRequired,
         qiniu: PropTypes.shape({}).isRequired,
@@ -101,6 +103,9 @@ class Setting extends Component {
         newState.editCtrl[hostName] = true;
         this.setState(newState);
         this.props.updateHostSetting(hostSetting);
+        const { APP_ID, APP_KEY } = hostSetting[hostName];
+        const { email } = this.props.userState;
+        initLeancloud(APP_ID, APP_KEY, email);
       })
       .catch((e) => {
         console.error(e);

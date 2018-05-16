@@ -40,7 +40,7 @@ const ImageUploadBox = (props) => {
 ImageUploadBox.propTypes = {
   handleInput: PropTypes.func.isRequired,
   dynamicStyle: PropTypes.shape({
-    height: PropTypes.string,
+    height: PropTypes.number,
   }).isRequired,
 };
 

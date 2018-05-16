@@ -19,8 +19,6 @@ class App extends Component {
     //   const { APP_ID, APP_KEY } = leancloud;
     //   if (APP_ID && APP_KEY && email) initLeancloud(APP_ID, APP_KEY, email);
     // } catch (e) {
-    //   message.error('请先登录并配置存储空间后使用');
-    //   this.props.replace('/user/login');
     // }
   }
 

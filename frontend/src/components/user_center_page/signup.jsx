@@ -50,14 +50,11 @@ class Signup extends Component {
     },
   };
 
-  static fetchLock = false;
-
   state = {
     [REMEMBER_ME]: true,
   };
 
   fetchUserSignup() {
-    if (Signup.fetchLock) return message.warning('请勿频繁点击');
     if (!this.state[REMEMBER_ME]) return message.error('请同意注册协议后重试！');
     this.props.fetchUserSignup(this.props.validateState, 'signup');
     return null;

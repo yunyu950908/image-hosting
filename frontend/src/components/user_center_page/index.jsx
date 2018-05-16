@@ -13,7 +13,6 @@ const UserCenterPage = (props) => {
   return (
     <section
       id="user-center-page"
-      // className="d-flex justify-content-center align-items-center"
     >
       <Route exact path={`${matchUrl}`} component={UserInfo} />
       <Route path={`${matchUrl}/signup`} component={SignupAndLogin} />

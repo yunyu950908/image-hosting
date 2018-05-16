@@ -49,7 +49,7 @@ function userSignup(signupInfo) {
         });
       } else {
         message.success('注册成功！');
-        await sleep(1000);
+        await sleep(500);
         dispatch({
           type: FETCH_SIGNUP_SUCCESS,
           payload: data.data,
@@ -80,7 +80,7 @@ function userForget(updateInfo) {
         });
       } else {
         message.success('修改成功！请重新登录...');
-        await new Promise(rsv => window.setTimeout(rsv, 1000));
+        await new Promise(rsv => window.setTimeout(rsv, 500));
         dispatch({
           type: FETCH_FORGET_SUCCESS,
           payload: data.data,
@@ -131,7 +131,7 @@ function userLogin(loginInfo) {
       const { code, msg } = data;
       if (code !== 0) return message.error(msg);
       message.success('登录成功！正在前往存储设置...');
-      await sleep(1000);
+      await sleep(500);
       // 提交 action
       dispatch({
         type: FETCH_LOGIN_SUCCESS,

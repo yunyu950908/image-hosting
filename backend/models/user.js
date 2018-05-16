@@ -9,17 +9,18 @@ const UserSchema = new Schema({
   nickname: { type: String },
   hostSetting: {
     leancloud: {
+      instanceName: { type: String, required: true, default: 'leancloud' },
+      host: { type: String, required: true, default: 'https://leancloud.cn/' },
       APP_ID: { type: String, required: true, default: '尚未配置' },
       APP_KEY: { type: String, required: true, default: '尚未配置' },
       // fileData: [], // 直接在前端 leancloud API 增 删 查
     },
     qiniu: {
-      AK: { type: String },
-      SK: { type: String },
-      hostname: { type: String },
-      imageMark: { type: String },
+      instanceName: { type: String, required: true, default: '七牛云' },
+      host: { type: String, required: true, default: 'https://www.qiniu.com/' },
+      AK: { type: String, required: true, default: '尚未配置' },
+      SK: { type: String, required: true, default: '尚未配置' },
     },
-    aliyun: {},
   },
 });
 

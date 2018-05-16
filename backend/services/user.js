@@ -90,8 +90,10 @@ async function addNewUser(userInfo) {
   if (!result) throw new InternalServerError('db error');
   await RedisService.del(`${email}${messageId}`);
   const token = JWTService.setJWT(result._id);
+  const defaultSettings = await UserModel.findUserByEmail(email);
   return {
     email,
+    hostSetting: defaultSettings.hostSetting,
     token,
   };
 }

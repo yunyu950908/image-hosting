@@ -2,12 +2,12 @@ import {
   USER_UPDATE,
   USER_DELETE,
   USER_LOGOUT,
-  USER_LOGIN,
   ZHAZHA_TOKEN,
   ZHAZHA_USER,
   REMEMBER_ME,
   FETCH_SIGNUP_SUCCESS,
   FETCH_FORGET_SUCCESS,
+  FETCH_LOGIN_SUCCESS,
 } from '../constants';
 
 const userInfo = window.sessionStorage.getItem(ZHAZHA_USER) || window.localStorage.getItem(ZHAZHA_USER) || '{}';
@@ -41,7 +41,7 @@ export const userState = (state = initialState, action = initialAction) => {
   const { payload, type } = action;
   const newState = cp(state);
   switch (type) {
-    case USER_LOGIN:
+    case FETCH_LOGIN_SUCCESS:
       if (payload[REMEMBER_ME]) {
         setLocalStorage(payload);
       } else {
@@ -63,7 +63,7 @@ export const userState = (state = initialState, action = initialAction) => {
     case USER_UPDATE:
     case USER_DELETE:
       clearStorage();
-      window.location.replace('/login');
+      window.location.replace('/user/login');
       return {};
     default:
   }

@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { replace, push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
-import { Form, Button, Checkbox, message } from 'antd';
+import { Form, Button, Checkbox } from 'antd';
 
-import * as API from '../../request';
-import { userLogin } from '../../redux/actions';
+import { fetchUserLogin } from '../../redux/actions';
 import { REMEMBER_ME } from '../../redux/constants';
 
 const { Item } = Form;
@@ -28,7 +27,7 @@ class Login extends Component {
         pwd: PropTypes.string.isRequired,
       }),
     }),
-    userLogin: PropTypes.func.isRequired,
+    fetchUserLogin: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     // push: PropTypes.func.isRequired,
   };
@@ -40,41 +39,9 @@ class Login extends Component {
     },
   };
 
-  static fetchLock = false;
-
   state = {
     [REMEMBER_ME]: true,
   };
-
-  fetchUserLogin() {
-    if (Login.fetchLock) return message.warning('请勿频繁点击');
-    const { validateInput, userInput } = this.props.validateState;
-    const isAllTrue = validateInput.email && Object.values(validateInput.pwd).every(v => v);
-    if (!isAllTrue) return message.error('账号或密码错误！');
-    const userInfo = {
-      email: userInput.email,
-      password: userInput.pwd,
-    };
-    Login.fetchLock = true;
-    API.fetchLogin(userInfo)
-      .then(({ data }) => {
-        Login.fetchLock = false;
-        const { code, msg } = data;
-        if (code !== 0) return message.error(msg);
-        message.success('登录成功！');
-        // await new Promise(rsv => window.setTimeout(rsv,1000))
-        // 提交 action
-        this.props.userLogin({ ...data.data, [REMEMBER_ME]: this.state[REMEMBER_ME] });
-        window.location.replace('/setting');
-        return null;
-      })
-      .catch((err) => {
-        Login.fetchLock = false;
-        console.error(err);
-        message.error('服务器开小差了... 请稍后再试，或尝试联系管理员...');
-      });
-    return null;
-  }
 
   render() {
     return (
@@ -95,7 +62,7 @@ class Login extends Component {
             <Button
               type="primary"
               style={{ marginBottom: 24 }}
-              onClick={() => this.fetchUserLogin()}
+              onClick={() => this.props.fetchUserLogin(this.props.validateState, this.state[REMEMBER_ME])}
             >
               戳我登录
             </Button>
@@ -112,4 +79,4 @@ const mapStateToProps = (state) => {
   return { validateState };
 };
 
-export default connect(mapStateToProps, { push, replace, userLogin })(Login);
+export default connect(mapStateToProps, { push, replace, fetchUserLogin })(Login);

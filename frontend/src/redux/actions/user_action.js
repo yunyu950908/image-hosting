@@ -3,22 +3,22 @@ import { message } from 'antd';
 import {
   USER_UPDATE,
   USER_DELETE,
-  USER_LOGIN,
   USER_LOGOUT,
   FETCH_SIGNUP_SUCCESS,
   FETCH_SIGNUP_FAILED,
   MESSAGE_ID,
   FETCH_FORGET_SUCCESS,
   FETCH_FORGET_FAILED,
+  REMEMBER_ME,
+  FETCH_LOGIN_SUCCESS,
+  FETCH_LOGIN_FAILED,
 } from '../constants';
 import * as API from '../../request';
 
-export const userLogin = data => ({
-  type: USER_LOGIN,
-  payload: {
-    ...data,
-  },
-});
+const sleep = async (ms) => {
+  const result = await new Promise(rsv => window.setTimeout(rsv, ms));
+  return result;
+};
 
 export const userLogout = () => ({
   type: USER_LOGOUT,
@@ -49,7 +49,7 @@ function userSignup(signupInfo) {
         });
       } else {
         message.success('注册成功！');
-        await new Promise(rsv => window.setTimeout(rsv, 1000));
+        await sleep(1000);
         dispatch({
           type: FETCH_SIGNUP_SUCCESS,
           payload: data.data,
@@ -122,4 +122,54 @@ export const fetchUserSignup = (validateState, target) => {
     messageId: userInput.messageId,
   };
   return target === 'signup' ? userSignup(prepareSignupInfo) : userForget(prepareSignupInfo);
+};
+
+function userLogin(loginInfo) {
+  return async function fetchUserLogin(dispatch) {
+    try {
+      const { data } = await API.fetchLogin(loginInfo);
+      const { code, msg } = data;
+      if (code !== 0) return message.error(msg);
+      message.success('登录成功！正在前往存储设置...');
+      await sleep(1000);
+      // 提交 action
+      dispatch({
+        type: FETCH_LOGIN_SUCCESS,
+        payload: {
+          ...data.data,
+          [REMEMBER_ME]: loginInfo[REMEMBER_ME],
+        },
+      });
+      window.location.replace('/setting');
+    } catch (e) {
+      console.error(e);
+      message.error('服务器开小差了... 请稍后再试，或尝试联系管理员...');
+      dispatch({
+        type: FETCH_LOGIN_FAILED,
+        payload: {},
+      });
+    }
+    return null;
+  };
+}
+
+export const fetchUserLogin = (validateState, isRemember) => {
+  let lock = true;
+  const { validateInput, userInput } = validateState;
+  // 确保邮箱，密码
+  const isPwdAllTrue = Object.values(validateInput.pwd).every(v => v);
+  if (!validateInput.email) {
+    message.error('email 地址错误，请检查后重试！');
+  } else if (!isPwdAllTrue) {
+    message.error('密码格式有误，请检查后重试！');
+  } else {
+    lock = false;
+  }
+  if (lock) return { type: '', payload: {} };
+  const prepareLoginInfo = {
+    email: userInput.email,
+    password: userInput.pwd,
+    [REMEMBER_ME]: isRemember,
+  };
+  return userLogin(prepareLoginInfo);
 };

@@ -43,7 +43,7 @@ class Setting extends Component {
     const editCtrl = {};
     let hostSetting = {};
     if (this.props.userState.email) {
-      hostSetting = this.props.userState;
+      hostSetting = this.props.userState.hostSetting || {};
       this.keys = Object.keys(hostSetting);
       this.keys.forEach((hostName) => {
         editCtrl[hostName] = true;

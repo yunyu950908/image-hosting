@@ -27,7 +27,7 @@ emmmmm... 第一次用 react + express 做了个稍微有点儿用的东西 —�
 ### 技术栈
 > emmmm... 这玩意儿是不是就写写主要用了哪些包 =。=
 
-### 前端
+#### 前端
 1. react
 2. redux
 3. react-redux
@@ -42,7 +42,7 @@ emmmmm... 第一次用 react + express 做了个稍微有点儿用的东西 —�
 12. IED - JetBrains(WebStrom)
 13. 其他
 
-### 后端
+#### 后端
 1. node
 2. express
 3. mongodb
@@ -57,3 +57,85 @@ emmmmm... 第一次用 react + express 做了个稍微有点儿用的东西 —�
 12. IED - JetBrains(WebStrom)
 13. centOS7
 
+### 目录结构
+#### 前端
+```bash
+.
+├── index.jsx
+├── App
+├── components
+│   ├── alert_info.jsx
+│   ├── footer_dom.jsx
+│   ├── header_dom.jsx
+│   ├── main_dom.jsx
+│   ├── image_upload_page
+│   ├── my_uploaded_page
+│   ├── storage_setting_page
+│   ├── user_center_page
+├── redux
+│   ├── actions
+│   ├── constants
+│   ├── middlewares
+│   ├── reducers
+│   └── store
+├── request
+└── utils
+    ├── history.js
+    ├── leancloud
+    ├── logger.js
+    └── verify
+```
+
+### 后端
+```bash
+.
+├── app.js
+├── bin
+│   └── www
+├── config
+│   ├── cipher
+│   │   ├── jwt_config.js
+│   │   └── password_config.js
+│   └── setting
+│       └── index.js
+├── doc
+├── errors
+│   ├── error_code.js
+│   ├── http_base_error.js
+│   ├── http_request_param_error.js
+│   ├── internal_server_error.js
+│   ├── login_error.js
+│   ├── no_auth_error.js
+│   └── resource_not_found_error.js
+├── logs
+│   ├── app
+│   ├── redis
+│   └── req
+├── middlewares
+│   ├── auth.js
+│   ├── error_handler.js
+│   └── http_error_handler.js
+├── models
+│   └── user.js
+├── package-lock.json
+├── package.json
+├── public
+├── routes
+│   ├── index.js
+│   └── user.js
+├── services
+│   ├── common_service.js
+│   ├── jwt_service.js
+│   ├── mail_service.js
+│   ├── mongoose_service.js
+│   ├── redis_service.js
+│   └── user.js
+├── test
+├── utils
+│   ├── api_response.js
+│   └── loggers
+│       ├── loggerGenerator.js
+│       └── logsMeta.js
+└── views
+
+```

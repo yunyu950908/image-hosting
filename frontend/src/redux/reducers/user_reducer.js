@@ -11,8 +11,11 @@ import {
 } from '../constants';
 
 const userInfo = window.sessionStorage.getItem(ZHAZHA_USER) || window.localStorage.getItem(ZHAZHA_USER) || '{}';
+const parseInfo = JSON.parse(userInfo);
 const initialState = {
-  ...JSON.parse(userInfo),
+  email: parseInfo.email || '',
+  hostSetting: parseInfo.hostSetting || {},
+  token: parseInfo.token || '',
 };
 
 const initialAction = {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Card, Row, Col, message, Divider } from 'antd';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import { updateHostSetting } from '../../redux/actions';
 import { initLeancloud } from '../../utils/leancloud';
@@ -19,6 +20,7 @@ class Setting extends Component {
       }),
     }),
     updateHostSetting: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -233,7 +235,14 @@ class Setting extends Component {
           <div className="alert" role="alert">
             <Divider orientation="left">友情提醒 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</Divider>
             <h5 className="text-center font-weight-light">
-              需登录后才能配置私人存储空间（ 还没注册？<Button type="primary">戳我注册</Button> 已有账号？<Button>立即登录</Button> ）
+              需登录后才能配置私人存储空间（ 还没注册？
+              <Button
+                type="primary"
+                onClick={() => this.props.push('/user/signup')}
+              >
+                戳我注册
+              </Button>
+              已有账号？<Button onClick={() => this.props.push('/user/login')}> 立即登录 </Button> ）
             </h5>
             <Divider orientation="right">友情提醒 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</Divider>
           </div>
@@ -248,4 +257,4 @@ const mapStateToProps = (state) => {
   return { userState };
 };
 
-export default connect(mapStateToProps, { updateHostSetting })(Setting);
+export default connect(mapStateToProps, { updateHostSetting, push })(Setting);

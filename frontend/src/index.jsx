@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ClipboardJS from 'clipboard';
+import { Route } from 'react-router-dom';
 
 // react router
 import { ConnectedRouter } from 'react-router-redux';
@@ -39,18 +40,19 @@ ReactDOM.render(
   <LocaleProvider locale={zhCN}>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <App />
+        <Route path="/" component={App} />
       </ConnectedRouter>
     </Provider>
   </LocaleProvider>
-  , document.getElementById('root'));
+  , document.getElementById('root'),
+);
 
 if (module.hot) {
   module.hot.accept('./App/App', () => {
     ReactDOM.render(
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <App />
+          <Route path="/" component={App} />
         </ConnectedRouter>
       </Provider>,
       document.getElementById('root'),

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { replace } from 'react-router-redux';
 import './App.css';
@@ -33,7 +32,7 @@ class App extends Component {
       const { APP_ID, APP_KEY } = leancloud;
       if (APP_ID && APP_KEY && email) initLeancloud(APP_ID, APP_KEY, email);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   }
 
@@ -41,7 +40,7 @@ class App extends Component {
     return (
       <div className="App">
         <HeaderDOM />
-        <Route path="/" component={MainDOM} />
+        <MainDOM />
         <FooterDOM />
       </div>
     );

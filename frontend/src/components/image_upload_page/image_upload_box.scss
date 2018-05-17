@@ -1,0 +1,11 @@
+#image-upload-content {
+  width: 768px;
+  height: 328px;
+  border: 1px dashed #999999;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  &:hover {
+    border-color: rgb(64, 169, 255);
+  }
+}

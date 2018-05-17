@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, Button, Card, Row, Col, message, Divider } from 'antd';
+import { Form, Input, Button, Card, Row, Col, message } from 'antd';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import { updateHostSetting } from '../../redux/actions';
 import { initLeancloud } from '../../utils/leancloud';
 import * as API from '../../request';
+import AlertInfo from '../alert_info';
 
 const { Item } = Form;
 
@@ -232,20 +233,7 @@ class Setting extends Component {
       >
         {this.props.userState.email ?
           this.cardsGenerator() :
-          <div className="alert" role="alert">
-            <Divider orientation="left">友情提醒 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</Divider>
-            <h5 className="text-center font-weight-light">
-              需登录后才能配置私人存储空间（ 还没注册？
-              <Button
-                type="primary"
-                onClick={() => this.props.push('/user/signup')}
-              >
-                戳我注册
-              </Button>
-              已有账号？<Button onClick={() => this.props.push('/user/login')}> 立即登录 </Button> ）
-            </h5>
-            <Divider orientation="right">友情提醒 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</Divider>
-          </div>
+          <AlertInfo tips="需登录后才能配置私人存储空间" />
         }
       </section>
     );
